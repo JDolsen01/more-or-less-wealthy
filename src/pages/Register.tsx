@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../helper/supabaseClient";
+import { Link } from "react-router-dom";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -54,6 +55,9 @@ function Register() {
         <br></br>
         {message && <p>{message}</p>}
       </form>
+      <div>Already have an account?</div>
+      <br></br>
+      <Link to="/login">Login</Link>
     </div>
   );
 }
