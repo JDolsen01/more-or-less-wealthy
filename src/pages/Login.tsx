@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "../helper/supabaseClient";
+import supabase from "../helper/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
@@ -19,6 +19,8 @@ function Login() {
 
     if (error) {
       setMessage(`Error: ${error.message}`);
+      setEmail("");
+      setPassword("");
       return;
     }
 
@@ -26,9 +28,6 @@ function Login() {
       navigate("/dashboard");
       return null;
     }
-
-    setEmail("");
-    setPassword("");
   };
 
   return (
