@@ -5,6 +5,9 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Transactions from "./pages/Transactions";
+import Recurring from "./pages/Recurring";
+import BudgetCategories from "./pages/BudgetCategories";
 
 function App() {
   return (
@@ -18,6 +21,30 @@ function App() {
           element={
             <Wrapper>
               <Dashboard />
+            </Wrapper>
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <Wrapper>
+              <Transactions />
+            </Wrapper>
+          }
+        />
+        <Route
+          path="/recurring"
+          element={
+            <Wrapper>
+              <Recurring />
+            </Wrapper>
+          }
+        />
+        <Route
+          path="/budget-categories"
+          element={
+            <Wrapper>
+              <BudgetCategories />
             </Wrapper>
           }
         />
