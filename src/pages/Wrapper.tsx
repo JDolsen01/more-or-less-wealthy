@@ -1,6 +1,7 @@
 import { useEffect, useState, type JSX } from "react";
 import supabase from "../helper/supabaseClient";
 import { Navigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 function Wrapper({ children }: { children: JSX.Element }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
@@ -21,7 +22,12 @@ function Wrapper({ children }: { children: JSX.Element }) {
     return <div>Loading...</div>;
   } else {
     if (authenticated) {
-      return children;
+      return (
+        <div>
+          <Navbar />
+          {children}
+        </div>
+      );
     }
     return <Navigate to="/login" replace />;
   }

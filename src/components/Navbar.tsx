@@ -1,0 +1,132 @@
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import supabase from "../helper/supabaseClient";
+
+function Navbar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+    navigate("/login");
+  };
+
+  return (
+    <>
+      <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar-start">
+          <Link to="/dashboard" className="btn btn-ghost text-xl">
+            More || Less Wealthy
+          </Link>
+        </div>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal px-1">
+            <li>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/transactions">Transactions</Link>
+            </li>
+            <li>
+              <Link to="/recurring">Recurring</Link>
+            </li>
+            <li>
+              <Link to="/budget-categories">Budgets</Link>
+            </li>
+          </ul>
+        </div>
+        <div className="navbar-end">
+          <button onClick={handleSignOut} className="btn">
+            Logout
+          </button>
+        </div>
+      </div>
+
+      <div className="dock dock-lg lg:hidden">
+        <Link
+          className={location.pathname === "/dashboard" ? "dock-active" : ""}
+          to="/dashboard"
+        >
+          <svg
+            className="size-[1.2em]"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            {
+              "<!-- Icon from Myna UI Icons by Praveen Juge - https://github.com/praveenjuge/mynaui-icons/blob/main/LICENSE -->"
+            }
+            <g fill="currentColor">
+              <path d="M2 14.6V3a1 1 0 0 1 2 0v11.6c0 1.136 0 1.929.05 2.545c.05.606.143.954.277 1.217l.115.206c.289.47.702.853 1.196 1.105l.103.049c.251.108.584.184 1.113.227C7.471 20 8.264 20 9.4 20H21l.102.005a1 1 0 0 1 0 1.99L21 22H9.4c-1.103 0-1.991.001-2.709-.058c-.637-.052-1.208-.154-1.737-.381l-.224-.106a5 5 0 0 1-2.092-2.01l-.093-.175c-.302-.593-.428-1.233-.487-1.961C1.999 16.59 2 15.703 2 14.599" />
+              <path d="m19.25 16l-.012.23a2.25 2.25 0 0 1-2.008 2.008l-.23.012h-1a2.25 2.25 0 0 1-2.238-2.02L13.75 16V7A2.25 2.25 0 0 1 16 4.75h1l.23.012A2.25 2.25 0 0 1 19.25 7zm-7 0l-.012.23a2.25 2.25 0 0 1-2.008 2.008l-.23.012H9a2.25 2.25 0 0 1-2.238-2.02L6.75 16v-5A2.25 2.25 0 0 1 9 8.75h1l.23.012A2.25 2.25 0 0 1 12.25 11z" />
+            </g>
+          </svg>
+          <span className="dock-label">Dashboard</span>
+        </Link>
+
+        <Link
+          className={location.pathname === "/transactions" ? "dock-active" : ""}
+          to="/transactions"
+        >
+          <svg
+            className="size-[1.2em]"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            {
+              "<!-- Icon from Myna UI Icons by Praveen Juge - https://github.com/praveenjuge/mynaui-icons/blob/main/LICENSE -->"
+            }
+            <path
+              fill="currentColor"
+              d="M11 5.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5zm0 5.5a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5zm0 5.5a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5zM6.25 4.5a.75.75 0 0 0-1.068-.68l-2 .938a.75.75 0 0 0 .636 1.359l.932-.437v4.445a.75.75 0 0 0 1.5 0zm-2 10.781c0-.317.29-.656.75-.656h.04c.439 0 .71.322.71.618a.7.7 0 0 1-.16.444l-2.676 3.345A.75.75 0 0 0 3.5 20.25h3a.75.75 0 1 0 0-1.5H5.06l1.701-2.126a2.2 2.2 0 0 0 .49-1.38c0-1.216-1.037-2.12-2.21-2.12H5c-1.196 0-2.25.921-2.25 2.157v.174a.75.75 0 0 0 1.5 0z"
+            />
+          </svg>
+          <span className="dock-label">Transactions</span>
+        </Link>
+
+        <Link
+          className={location.pathname === "/recurring" ? "dock-active" : ""}
+          to="/recurring"
+        >
+          <svg
+            className="size-[1.2em]"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            {
+              "<!-- Icon from Myna UI Icons by Praveen Juge - https://github.com/praveenjuge/mynaui-icons/blob/main/LICENSE -->"
+            }
+            <path
+              fill="currentColor"
+              d="M16.4 2.55a.75.75 0 0 1 1.05-.15l4 3a.75.75 0 0 1 0 1.2l-4 3a.75.75 0 0 1-1.05-.15v-2.7H7A3.25 3.25 0 0 0 3.75 10v2a.75.75 0 0 1-1.5 0v-2A4.75 4.75 0 0 1 7 5.25h9.4zm4.6 8.7a.75.75 0 0 1 .75.75v2A4.75 4.75 0 0 1 17 18.75H7.6v2.7a.75.75 0 0 1-1.05.15l-4-3a.75.75 0 0 1 0-1.2l4-3a.75.75 0 0 1 1.05.15v2.7H17A3.25 3.25 0 0 0 20.25 14v-2a.75.75 0 0 1 .75-.75"
+            />
+          </svg>
+          <span className="dock-label">Recurring</span>
+        </Link>
+
+        <Link
+          className={
+            location.pathname === "/budget-categories" ? "dock-active" : ""
+          }
+          to="/budget-categories"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            className="size-[1.2em]"
+          >
+            {
+              "<!-- Icon from Myna UI Icons by Praveen Juge - https://github.com/praveenjuge/mynaui-icons/blob/main/LICENSE -->"
+            }
+            <g fill="currentColor">
+              <path d="M10.333 8.472h.917v2.778h-.917c-.937 0-1.583-.682-1.583-1.389s.646-1.389 1.583-1.389m2.417 7.056V12.75h.917c.937 0 1.583.682 1.583 1.389s-.646 1.389-1.583 1.389z" />
+              <path d="M9.367 2.25h5.266c1.092 0 1.958 0 2.655.057c.714.058 1.317.18 1.869.46a4.75 4.75 0 0 1 2.075 2.077c.281.55.403 1.154.461 1.868c.057.697.057 1.563.057 2.655v5.266c0 1.092 0 1.958-.057 2.655c-.058.714-.18 1.317-.46 1.869a4.75 4.75 0 0 1-2.076 2.075c-.552.281-1.155.403-1.869.461c-.697.057-1.563.057-2.655.057H9.367c-1.092 0-1.958 0-2.655-.057c-.714-.058-1.317-.18-1.868-.46a4.75 4.75 0 0 1-2.076-2.076c-.281-.552-.403-1.155-.461-1.869c-.057-.697-.057-1.563-.057-2.655V9.367c0-1.092 0-1.958.057-2.655c.058-.714.18-1.317.46-1.868a4.75 4.75 0 0 1 2.077-2.076c.55-.281 1.154-.403 1.868-.461c.697-.057 1.563-.057 2.655-.057M12.75 6.5a.75.75 0 0 0-1.5 0v.472h-.917c-1.64 0-3.083 1.234-3.083 2.89c0 1.655 1.443 2.888 3.083 2.888h.917v2.778H8a.75.75 0 0 0 0 1.5h3.25v.472a.75.75 0 0 0 1.5 0v-.472h.917c1.64 0 3.083-1.233 3.083-2.89c0-1.655-1.443-2.888-3.083-2.888h-.917V8.472h2.583a.75.75 0 0 0 0-1.5H12.75z" />
+            </g>
+          </svg>
+          <span className="dock-label">Budgets</span>
+        </Link>
+      </div>
+    </>
+  );
+}
+
+export default Navbar;
