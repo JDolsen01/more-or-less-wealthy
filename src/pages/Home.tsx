@@ -4,7 +4,7 @@ function Home() {
   return (
     <>
       <div>Home Page</div>
-      <Link to="/register">Register</Link>
+      <Link to="/signup">Signup</Link>
       <br></br>
       <Link to="/login">Login</Link>
     </>

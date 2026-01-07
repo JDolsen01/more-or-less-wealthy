@@ -85,8 +85,8 @@ function Login() {
             )}
             <div className="pt-4">
               Don't have an account?{" "}
-              <Link to="/register" className="link">
-                Register
+              <Link to="/signup" className="link">
+                Signup
               </Link>
             </div>
           </fieldset>
