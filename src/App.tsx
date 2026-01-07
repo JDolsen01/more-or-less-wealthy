@@ -7,7 +7,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Recurring from "./pages/Recurring";
-import BudgetCategories from "./pages/BudgetCategories";
+import Budgets from "./pages/Budgets";
 
 function App() {
   return (
@@ -41,10 +41,10 @@ function App() {
           }
         />
         <Route
-          path="/budget-categories"
+          path="/budgets"
           element={
             <Wrapper>
-              <BudgetCategories />
+              <Budgets />
             </Wrapper>
           }
         />

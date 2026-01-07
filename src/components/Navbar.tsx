@@ -31,7 +31,7 @@ function Navbar() {
               <Link to="/recurring">Recurring</Link>
             </li>
             <li>
-              <Link to="/budget-categories">Budgets</Link>
+              <Link to="/budgets">Budgets</Link>
             </li>
           </ul>
         </div>
@@ -104,10 +104,8 @@ function Navbar() {
         </Link>
 
         <Link
-          className={
-            location.pathname === "/budget-categories" ? "dock-active" : ""
-          }
-          to="/budget-categories"
+          className={location.pathname === "/budgets" ? "dock-active" : ""}
+          to="/budgets"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

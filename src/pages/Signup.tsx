@@ -38,10 +38,10 @@ function Signup() {
         </Link>
       </div>
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <h2 className="pb-4">Signup</h2>
+        <h2 className="pb-4">Sign Up</h2>
         <form onSubmit={handleSignup}>
           <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-            <legend className="fieldset-legend">Signup</legend>
+            <legend className="fieldset-legend">Sign Up</legend>
 
             <label className="label">Email</label>
             <input
@@ -64,7 +64,7 @@ function Signup() {
             />
 
             <button className="btn btn-neutral mt-4" type="submit">
-              Signup
+              Sign Up
             </button>
             {message && (
               <div role="alert" className="alert alert-error">
