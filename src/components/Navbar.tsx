@@ -1,10 +1,11 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import supabase from "../helper/supabaseClient";
+import Icon, { type IconList } from "./Icon";
 
 type LinksType = {
   name: string;
   path: string;
-  svgChildren: React.ReactElement;
+  icon: IconList;
 };
 
 interface NavbarProps {
@@ -52,16 +53,7 @@ function Navbar({ links }: NavbarProps) {
             className={location.pathname === link.path ? "dock-active" : ""}
             to={link.path}
           >
-            <svg
-              className="size-[1.2em]"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              {
-                "<!-- Icon from Myna UI Icons by Praveen Juge - https://github.com/praveenjuge/mynaui-icons/blob/main/LICENSE -->"
-              }
-              {link.svgChildren}
-            </svg>
+            <Icon type={link.icon} />
             <span className="dock-label">{link.name}</span>
           </Link>
         ))}
