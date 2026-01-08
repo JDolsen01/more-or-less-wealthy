@@ -24,7 +24,8 @@ function Navbar({ links }: NavbarProps) {
 
   return (
     <>
-      <div className="navbar bg-base-100 shadow-sm fixed z-10 ">
+      <div className="h-16"></div>
+      <div className="navbar bg-base-100 shadow-sm fixed top-0 left-0 right-0 z-10">
         <div className="navbar-start">
           <Link to="/dashboard" className="btn btn-ghost text-xl">
             More || Less Wealthy
