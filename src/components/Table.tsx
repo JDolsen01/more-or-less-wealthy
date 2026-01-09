@@ -12,7 +12,6 @@ function Table({ title, data }: TableProps) {
         <table className="table">
           <thead>
             <tr>
-              <th></th>
               {columns.map((col, index) => (
                 <th key={index}>{col}</th>
               ))}
@@ -21,7 +20,6 @@ function Table({ title, data }: TableProps) {
           <tbody>
             {data.map((row, rowIndex) => (
               <tr key={rowIndex} className="hover:bg-base-300">
-                <th>{rowIndex + 1}</th>
                 {columns.map((col, colIndex) => (
                   <td key={colIndex}>{row[col]}</td>
                 ))}
