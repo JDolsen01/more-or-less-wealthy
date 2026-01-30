@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type JSX } from "react";
-import supabase from "../helper/supabaseClient";
+import supabase from "../helpers/supabaseClient";
 import { Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Fab from "../components/Fab";

@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import supabase from "../helper/supabaseClient";
+import supabase from "../helpers/supabaseClient";
 import Icon, { type IconList } from "./Icon";
 
 type LinksType = {
