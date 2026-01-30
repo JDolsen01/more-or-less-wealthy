@@ -2,26 +2,26 @@ import Table from "../components/Table";
 
 const reocurringExpenses = [
   {
-    Date: "2026-01-01",
+    Date: "01-01-2026",
     Name: "Gym Membership",
     Budget: "Subscription",
     Amount: "$50",
   },
   {
-    Date: "2026-01-05",
+    Date: "01-05-2026",
     Name: "Netflix Subscription",
     Budget: "Subscription",
     Amount: "$15",
   },
-  { Date: "2026-01-10", Name: "Rent", Budget: "Housing", Amount: "$1200" },
+  { Date: "01-10-2026", Name: "Rent", Budget: "Housing", Amount: "$1200" },
   {
-    Date: "2026-01-15",
+    Date: "01-15-2026",
     Name: "Car Payment",
     Budget: "Transportation",
     Amount: "$300",
   },
   {
-    Date: "2026-01-20",
+    Date: "01-30-2026",
     Name: "Internet Bill",
     Budget: "Utilities",
     Amount: "$60",
