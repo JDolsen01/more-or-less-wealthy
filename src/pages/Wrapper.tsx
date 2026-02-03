@@ -3,6 +3,7 @@ import supabase from "../helpers/supabaseClient";
 import { Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Fab from "../components/Fab";
+import InputFormModal from "../components/InputFormModal";
 
 function Wrapper({ children }: { children: JSX.Element }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
@@ -14,17 +15,10 @@ function Wrapper({ children }: { children: JSX.Element }) {
   const budgetModal = useRef<HTMLDialogElement>(null);
 
   const handleOpenModal = (
-    modalType: "income" | "expense" | "recurring" | "budget",
+    modalRef: React.RefObject<HTMLDialogElement | null>,
   ) => {
-    const modals = {
-      income: incomeModal,
-      expense: expenseModal,
-      recurring: recurringModal,
-      budget: budgetModal,
-    };
-
-    if (modals[modalType].current) {
-      modals[modalType].current.showModal();
+    if (modalRef.current) {
+      modalRef.current.showModal();
     } else {
       console.error("Modal element not found");
     }
@@ -77,185 +71,65 @@ function Wrapper({ children }: { children: JSX.Element }) {
               {
                 label: "Income",
                 icon: "inboxPlus",
-                onClick: () => handleOpenModal("income"),
+                onClick: () => handleOpenModal(incomeModal),
               },
               {
                 label: "Expense",
                 icon: "inboxMinus",
-                onClick: () => handleOpenModal("expense"),
+                onClick: () => handleOpenModal(expenseModal),
               },
               {
                 label: "Recurring",
                 icon: "repeat",
-                onClick: () => handleOpenModal("recurring"),
+                onClick: () => handleOpenModal(recurringModal),
               },
               {
                 label: "Budget",
                 icon: "dollar",
-                onClick: () => handleOpenModal("budget"),
+                onClick: () => handleOpenModal(budgetModal),
               },
             ]}
           />
-          <dialog
-            id="my_modal_5"
-            className="modal modal-bottom sm:modal-middle"
+          <InputFormModal
+            id="incomeModal"
             ref={incomeModal}
-          >
-            <div className="modal-box">
-              <h3 className="font-bold text-lg mb-2">Add Income</h3>
-              <form>
-                <label className="floating-label">
-                  <span>Name</span>
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    className="input input-md mb-4 w-full"
-                  />
-                </label>
-                <label className="input mb-4 w-full">
-                  <span className="label">Date</span>
-                  <input type="date" />
-                </label>
-                <label className="floating-label">
-                  <span>Amount</span>
-                  <input
-                    type="number"
-                    placeholder="Amount"
-                    className="input input-md mb-4 w-full"
-                  />
-                </label>
-                <span className="flex gap-2">
-                  <button className="btn flex-auto">Cancel</button>
-                  <button className="btn btn-primary flex-auto">Add</button>
-                </span>
-              </form>
-            </div>
-            <form method="dialog" className="modal-backdrop">
-              <button>close</button>
-            </form>
-          </dialog>
-          <dialog
-            id="my_modal_5"
-            className="modal modal-bottom sm:modal-middle"
+            title="Add Income"
+            inputs={[
+              { label: "Name", type: "text" },
+              { label: "Date", type: "date" },
+              { label: "Amount", type: "number" },
+            ]}
+          />
+          <InputFormModal
+            id="expenseModal"
             ref={expenseModal}
-          >
-            <div className="modal-box">
-              <h3 className="font-bold text-lg mb-2">Add Expense</h3>
-              <form>
-                <label className="floating-label">
-                  <span>Name</span>
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    className="input input-md mb-4 w-full"
-                  />
-                </label>
-                <label className="input mb-4 w-full">
-                  <span className="label">Date</span>
-                  <input type="date" />
-                </label>
-                <label className="floating-label">
-                  <span>Amount</span>
-                  <input
-                    type="number"
-                    placeholder="Amount"
-                    className="input input-md mb-4 w-full"
-                  />
-                </label>
-                <span className="flex gap-4">
-                  <button className="btn flex-auto">Cancel</button>
-                  <button className="btn btn-primary flex-auto">Add</button>
-                </span>
-              </form>
-            </div>
-            <form method="dialog" className="modal-backdrop">
-              <button>close</button>
-            </form>
-          </dialog>
-          <dialog
-            id="my_modal_5"
-            className="modal modal-bottom sm:modal-middle"
+            title="Add Expense"
+            inputs={[
+              { label: "Name", type: "text" },
+              { label: "Date", type: "date" },
+              { label: "Amount", type: "number" },
+            ]}
+          />
+          <InputFormModal
+            id="recurringModal"
             ref={recurringModal}
-          >
-            <div className="modal-box">
-              <h3 className="font-bold text-lg mb-2">Add Recurring</h3>
-              <form>
-                <label className="floating-label">
-                  <span>Name</span>
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    className="input input-md mb-4 w-full"
-                  />
-                </label>
-                <label className="input mb-4 w-full">
-                  <span className="label">Start Date</span>
-                  <input type="date" />
-                </label>
-                <label className="select mb-4 w-full">
-                  <span className="label">Frequency</span>
-                  <select defaultValue="Monthly" className="select">
-                    <option>Weekly</option>
-                    <option>Biweekly</option>
-                    <option>Monthly</option>
-                    <option>Bimonthly</option>
-                    <option>Quarterly</option>
-                    <option>Semiannually</option>
-                    <option>Annually</option>
-                  </select>
-                </label>
-                <label className="floating-label">
-                  <span>Amount</span>
-                  <input
-                    type="number"
-                    placeholder="Amount"
-                    className="input input-md mb-4 w-full"
-                  />
-                </label>
-                <span className="flex gap-4">
-                  <button className="btn flex-auto">Cancel</button>
-                  <button className="btn btn-primary flex-auto">Add</button>
-                </span>
-              </form>
-            </div>
-            <form method="dialog" className="modal-backdrop">
-              <button>close</button>
-            </form>
-          </dialog>
-          <dialog
-            id="my_modal_5"
-            className="modal modal-bottom sm:modal-middle"
+            title="Add Recurring"
+            inputs={[
+              { label: "Name", type: "text" },
+              { label: "Start Date", type: "date" },
+              { label: "Frequency", type: "frequency", value: "Monthly" },
+              { label: "Amount", type: "number" },
+            ]}
+          />
+          <InputFormModal
+            id="budgetModal"
             ref={budgetModal}
-          >
-            <div className="modal-box">
-              <h3 className="font-bold text-lg mb-2">Add Budget</h3>
-              <form>
-                <label className="floating-label">
-                  <span>Name</span>
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    className="input input-md mb-4 w-full"
-                  />
-                </label>
-                <label className="floating-label">
-                  <span>Amount</span>
-                  <input
-                    type="number"
-                    placeholder="Amount"
-                    className="input input-md mb-4 w-full"
-                  />
-                </label>
-                <span className="flex gap-4">
-                  <button className="btn flex-auto">Cancel</button>
-                  <button className="btn btn-primary flex-auto">Add</button>
-                </span>
-              </form>
-            </div>
-            <form method="dialog" className="modal-backdrop">
-              <button>close</button>
-            </form>
-          </dialog>
+            title="Add Budget"
+            inputs={[
+              { label: "Name", type: "text" },
+              { label: "Amount", type: "number" },
+            ]}
+          />
           {children}
         </div>
       );
