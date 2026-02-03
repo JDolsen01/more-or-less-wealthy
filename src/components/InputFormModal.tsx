@@ -1,22 +1,36 @@
-type InputTypes =
-  | "text"
-  | "number"
-  | "date"
-  | "password"
-  | "email"
-  | "phone"
-  | "hidden"
-  | "frequency";
+// Convert mm-dd-yyyy to yyyy-mm-dd for date input
+const formatDateForInput = (dateString?: string | number): string => {
+  if (!dateString) return "";
+  const str = dateString.toString();
+  const [month, day, year] = str.split("-");
+  return `${year}-${month}-${day}`;
+};
+
+type InputBase = {
+  label: string;
+  value?: string | number;
+};
+
+type SelectInput = InputBase & {
+  type: "select";
+  options: string[]; // required when type is "select"
+};
+
+type OtherInput = InputBase & {
+  type: "text" | "number" | "date" | "password" | "email" | "phone" | "hidden";
+  options?: never; // disallow options for other types
+};
+
+type InputTypes = SelectInput | OtherInput;
+
+type ActionType = "Add" | "Save" | "Delete";
 
 interface InputFormModalProps {
   id: string;
   ref: React.Ref<HTMLDialogElement>;
   title: string;
-  inputs: {
-    label: string;
-    type: InputTypes;
-    value?: string | number;
-  }[];
+  inputs: InputTypes[];
+  action: ActionType;
   onClose?: (data: any) => void;
   onSubmit?: (data: any) => void;
 }
@@ -26,6 +40,7 @@ function InputFormModal({
   ref,
   title,
   inputs,
+  action,
   onClose,
   onSubmit,
 }: InputFormModalProps) {
@@ -44,21 +59,26 @@ function InputFormModal({
                 return (
                   <label key={index} className="input mb-4 w-full">
                     <span className="label">{input.label}</span>
-                    <input type="date" defaultValue={input.value as string} />
+                    <input
+                      type="date"
+                      defaultValue={formatDateForInput(input.value)}
+                    />
                   </label>
                 );
-              case "frequency":
+              case "select":
                 return (
                   <label key={index} className="select mb-4 w-full">
                     <span className="label">{input.label}</span>
-                    <select defaultValue={input.value} className="select">
-                      <option>Weekly</option>
-                      <option>Biweekly</option>
-                      <option>Monthly</option>
-                      <option>Bimonthly</option>
-                      <option>Quarterly</option>
-                      <option>Semiannually</option>
-                      <option>Annually</option>
+                    <select
+                      key={`${input.label}-${input.value}`}
+                      defaultValue={input.value}
+                      className="select"
+                    >
+                      {input.options.map((option, optIndex) => (
+                        <option key={optIndex} value={option}>
+                          {option}
+                        </option>
+                      ))}
                     </select>
                   </label>
                 );
@@ -89,7 +109,7 @@ function InputFormModal({
               type="submit"
               form={`${id}-form`}
             >
-              Add
+              {action}
             </button>
           </span>
         </form>

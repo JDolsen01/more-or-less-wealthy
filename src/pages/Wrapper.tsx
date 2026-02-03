@@ -5,6 +5,14 @@ import Navbar from "../components/Navbar";
 import Fab from "../components/Fab";
 import InputFormModal from "../components/InputFormModal";
 
+const budgets = [
+  "Subscription",
+  "Housing",
+  "Transportation",
+  "Utilities",
+  "Groceries",
+];
+
 function Wrapper({ children }: { children: JSX.Element }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -103,6 +111,7 @@ function Wrapper({ children }: { children: JSX.Element }) {
               { label: "Date", type: "date" },
               { label: "Amount", type: "number" },
             ]}
+            action="Add"
           />
           <InputFormModal
             id="expenseModal"
@@ -110,9 +119,16 @@ function Wrapper({ children }: { children: JSX.Element }) {
             title="Add Expense"
             inputs={[
               { label: "Name", type: "text" },
+              {
+                label: "Budget",
+                type: "select",
+                value: budgets[0],
+                options: budgets,
+              },
               { label: "Date", type: "date" },
               { label: "Amount", type: "number" },
             ]}
+            action="Add"
           />
           <InputFormModal
             id="recurringModal"
@@ -120,10 +136,30 @@ function Wrapper({ children }: { children: JSX.Element }) {
             title="Add Recurring"
             inputs={[
               { label: "Name", type: "text" },
+              {
+                label: "Budget",
+                type: "select",
+                value: budgets[0],
+                options: budgets,
+              },
               { label: "Due", type: "date" },
-              { label: "Frequency", type: "frequency", value: "Monthly" },
+              {
+                label: "Frequency",
+                type: "select",
+                value: "Monthly",
+                options: [
+                  "Weekly",
+                  "Biweekly",
+                  "Monthly",
+                  "Bimonthly",
+                  "Quarterly",
+                  "Semiannually",
+                  "Annually",
+                ],
+              },
               { label: "Amount", type: "number" },
             ]}
+            action="Add"
           />
           <InputFormModal
             id="budgetModal"
@@ -133,6 +169,7 @@ function Wrapper({ children }: { children: JSX.Element }) {
               { label: "Name", type: "text" },
               { label: "Amount", type: "number" },
             ]}
+            action="Add"
           />
           {children}
         </div>

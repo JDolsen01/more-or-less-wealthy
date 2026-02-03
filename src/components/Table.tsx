@@ -1,9 +1,17 @@
+import Icon from "./Icon";
+
+type ActionType = "edit" | "delete" | "complete";
+
 interface TableProps {
   title?: string;
   data: Array<Record<string, any>>;
+  actions?: {
+    action?: (row: Record<string, any>) => void;
+    type: ActionType;
+  }[];
 }
 
-function Table({ title, data }: TableProps) {
+function Table({ title, data, actions }: TableProps) {
   const columns = Object.keys(data[0] || {});
   return (
     <div>
@@ -17,6 +25,7 @@ function Table({ title, data }: TableProps) {
                   {col}
                 </th>
               ))}
+              {actions && actions.length > 0 && <th></th>}
             </tr>
           </thead>
           <tbody>
@@ -27,6 +36,22 @@ function Table({ title, data }: TableProps) {
                     {row[col]}
                   </td>
                 ))}
+                {actions && actions.length > 0 && (
+                  <td
+                    className="whitespace-nowrap flex flex-row gap-2"
+                    key={`action-${rowIndex}`}
+                  >
+                    {actions.map((action) => (
+                      <button
+                        className="btn btn-xs btn-circle"
+                        key={action.type}
+                        onClick={() => action.action?.(row)}
+                      >
+                        <Icon type={action.type} />
+                      </button>
+                    ))}
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
