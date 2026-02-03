@@ -5,6 +5,7 @@ type InputTypes =
   | "password"
   | "email"
   | "phone"
+  | "hidden"
   | "frequency";
 
 interface InputFormModalProps {
@@ -16,7 +17,7 @@ interface InputFormModalProps {
     type: InputTypes;
     value?: string | number;
   }[];
-  onClose?: () => void;
+  onClose?: (data: any) => void;
   onSubmit?: (data: any) => void;
 }
 
@@ -32,9 +33,13 @@ function InputFormModal({
     <dialog id={id} className="modal modal-bottom sm:modal-middle" ref={ref}>
       <div className="modal-box">
         <h3 className="font-bold text-lg mb-2">{title}</h3>
-        <form onSubmit={onSubmit}>
+        <form id={`${id}-form`} onSubmit={onSubmit}>
           {inputs.map((input, index) => {
             switch (input.type) {
+              case "hidden":
+                return (
+                  <input key={index} type="hidden" defaultValue={input.value} />
+                );
               case "date":
                 return (
                   <label key={index} className="input mb-4 w-full">
@@ -72,14 +77,24 @@ function InputFormModal({
             }
           })}
           <span className="flex gap-2">
-            <button className="btn flex-auto" onClick={onClose}>
+            <button
+              className="btn flex-auto"
+              form={`${id}-backdrop`}
+              onClick={onClose}
+            >
               Cancel
             </button>
-            <button className="btn btn-primary flex-auto">Add</button>
+            <button
+              className="btn btn-primary flex-auto"
+              type="submit"
+              form={`${id}-form`}
+            >
+              Add
+            </button>
           </span>
         </form>
       </div>
-      <form method="dialog" className="modal-backdrop">
+      <form id={`${id}-backdrop`} method="dialog" className="modal-backdrop">
         <button>close</button>
       </form>
     </dialog>

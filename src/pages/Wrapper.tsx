@@ -120,7 +120,7 @@ function Wrapper({ children }: { children: JSX.Element }) {
             title="Add Recurring"
             inputs={[
               { label: "Name", type: "text" },
-              { label: "Start Date", type: "date" },
+              { label: "Due", type: "date" },
               { label: "Frequency", type: "frequency", value: "Monthly" },
               { label: "Amount", type: "number" },
             ]}

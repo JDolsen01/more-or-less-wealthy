@@ -2,35 +2,35 @@ import Table from "../components/Table";
 
 const reocurringExpenses = [
   {
-    Start: "01-01-2026",
+    Due: "01-01-2026",
     Frequency: "Monthly",
     Name: "Gym Membership",
     Budget: "Subscription",
     Amount: "$50",
   },
   {
-    Start: "01-05-2026",
+    Due: "01-05-2026",
     Frequency: "Monthly",
     Name: "Netflix Subscription",
     Budget: "Subscription",
     Amount: "$15",
   },
   {
-    Start: "01-10-2026",
+    Due: "01-10-2026",
     Frequency: "Monthly",
     Name: "Rent",
     Budget: "Housing",
     Amount: "$1200",
   },
   {
-    Start: "01-15-2026",
+    Due: "01-15-2026",
     Frequency: "Monthly",
     Name: "Car Payment",
     Budget: "Transportation",
     Amount: "$300",
   },
   {
-    Start: "01-30-2026",
+    Due: "01-30-2026",
     Frequency: "Monthly",
     Name: "Internet Bill",
     Budget: "Utilities",
@@ -40,7 +40,7 @@ const reocurringExpenses = [
 
 function Recurring() {
   const pastDueExpenses = reocurringExpenses.filter(
-    (exp) => new Date(exp.Start) < new Date(),
+    (exp) => new Date(exp.Due) < new Date(),
   );
 
   return (
