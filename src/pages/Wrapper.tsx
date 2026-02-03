@@ -14,7 +14,7 @@ function Wrapper({ children }: { children: JSX.Element }) {
   const budgetModal = useRef<HTMLDialogElement>(null);
 
   const handleOpenModal = (
-    modalType: "income" | "expense" | "recurring" | "budget"
+    modalType: "income" | "expense" | "recurring" | "budget",
   ) => {
     const modals = {
       income: incomeModal,
@@ -102,10 +102,33 @@ function Wrapper({ children }: { children: JSX.Element }) {
             ref={incomeModal}
           >
             <div className="modal-box">
-              <h3 className="font-bold text-lg">Add Income</h3>
-              <p className="py-4">
-                Press ESC key or click the button below to close
-              </p>
+              <h3 className="font-bold text-lg mb-2">Add Income</h3>
+              <form>
+                <label className="floating-label">
+                  <span>Name</span>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    className="input input-md mb-4 w-full"
+                  />
+                </label>
+                <label className="input mb-4 w-full">
+                  <span className="label">Date</span>
+                  <input type="date" />
+                </label>
+                <label className="floating-label">
+                  <span>Amount</span>
+                  <input
+                    type="number"
+                    placeholder="Amount"
+                    className="input input-md mb-4 w-full"
+                  />
+                </label>
+                <span className="flex gap-2">
+                  <button className="btn flex-auto">Cancel</button>
+                  <button className="btn btn-primary flex-auto">Add</button>
+                </span>
+              </form>
             </div>
             <form method="dialog" className="modal-backdrop">
               <button>close</button>
@@ -117,10 +140,33 @@ function Wrapper({ children }: { children: JSX.Element }) {
             ref={expenseModal}
           >
             <div className="modal-box">
-              <h3 className="font-bold text-lg">Add Expense</h3>
-              <p className="py-4">
-                Press ESC key or click the button below to close
-              </p>
+              <h3 className="font-bold text-lg mb-2">Add Expense</h3>
+              <form>
+                <label className="floating-label">
+                  <span>Name</span>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    className="input input-md mb-4 w-full"
+                  />
+                </label>
+                <label className="input mb-4 w-full">
+                  <span className="label">Date</span>
+                  <input type="date" />
+                </label>
+                <label className="floating-label">
+                  <span>Amount</span>
+                  <input
+                    type="number"
+                    placeholder="Amount"
+                    className="input input-md mb-4 w-full"
+                  />
+                </label>
+                <span className="flex gap-4">
+                  <button className="btn flex-auto">Cancel</button>
+                  <button className="btn btn-primary flex-auto">Add</button>
+                </span>
+              </form>
             </div>
             <form method="dialog" className="modal-backdrop">
               <button>close</button>
@@ -132,10 +178,45 @@ function Wrapper({ children }: { children: JSX.Element }) {
             ref={recurringModal}
           >
             <div className="modal-box">
-              <h3 className="font-bold text-lg">Add Recurring Transaction</h3>
-              <p className="py-4">
-                Press ESC key or click the button below to close
-              </p>
+              <h3 className="font-bold text-lg mb-2">Add Recurring</h3>
+              <form>
+                <label className="floating-label">
+                  <span>Name</span>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    className="input input-md mb-4 w-full"
+                  />
+                </label>
+                <label className="input mb-4 w-full">
+                  <span className="label">Start Date</span>
+                  <input type="date" />
+                </label>
+                <label className="select mb-4 w-full">
+                  <span className="label">Frequency</span>
+                  <select defaultValue="Monthly" className="select">
+                    <option>Weekly</option>
+                    <option>Biweekly</option>
+                    <option>Monthly</option>
+                    <option>Bimonthly</option>
+                    <option>Quarterly</option>
+                    <option>Semiannually</option>
+                    <option>Annually</option>
+                  </select>
+                </label>
+                <label className="floating-label">
+                  <span>Amount</span>
+                  <input
+                    type="number"
+                    placeholder="Amount"
+                    className="input input-md mb-4 w-full"
+                  />
+                </label>
+                <span className="flex gap-4">
+                  <button className="btn flex-auto">Cancel</button>
+                  <button className="btn btn-primary flex-auto">Add</button>
+                </span>
+              </form>
             </div>
             <form method="dialog" className="modal-backdrop">
               <button>close</button>
@@ -147,10 +228,29 @@ function Wrapper({ children }: { children: JSX.Element }) {
             ref={budgetModal}
           >
             <div className="modal-box">
-              <h3 className="font-bold text-lg">Add Budget</h3>
-              <p className="py-4">
-                Press ESC key or click the button below to close
-              </p>
+              <h3 className="font-bold text-lg mb-2">Add Budget</h3>
+              <form>
+                <label className="floating-label">
+                  <span>Name</span>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    className="input input-md mb-4 w-full"
+                  />
+                </label>
+                <label className="floating-label">
+                  <span>Amount</span>
+                  <input
+                    type="number"
+                    placeholder="Amount"
+                    className="input input-md mb-4 w-full"
+                  />
+                </label>
+                <span className="flex gap-4">
+                  <button className="btn flex-auto">Cancel</button>
+                  <button className="btn btn-primary flex-auto">Add</button>
+                </span>
+              </form>
             </div>
             <form method="dialog" className="modal-backdrop">
               <button>close</button>
