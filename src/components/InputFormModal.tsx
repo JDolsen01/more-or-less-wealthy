@@ -4,6 +4,7 @@ type InputTypes =
   | "date"
   | "password"
   | "email"
+  | "phone"
   | "frequency";
 
 interface InputFormModalProps {
