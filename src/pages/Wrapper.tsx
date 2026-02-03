@@ -36,7 +36,11 @@ function Wrapper({ children }: { children: JSX.Element }) {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-ring loading-xl text-primary"></span>
+      </div>
+    );
   } else {
     if (authenticated) {
       return (
