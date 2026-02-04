@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import InputFormModal from "../components/InputFormModal";
 import Table from "../components/Table";
 
@@ -12,35 +12,35 @@ const budgets = [
 
 const reocurringExpenses = [
   {
-    Due: "01-01-2026",
+    Due: "2026-01-01",
     Frequency: "Semiannually",
     Name: "Gym Membership",
     Budget: "Subscription",
     Amount: "50",
   },
   {
-    Due: "01-05-2026",
+    Due: "2026-01-05",
     Frequency: "Monthly",
     Name: "Netflix Subscription",
     Budget: "Subscription",
     Amount: "15",
   },
   {
-    Due: "01-10-2026",
+    Due: "2026-01-10",
     Frequency: "Monthly",
     Name: "Rent",
     Budget: "Housing",
     Amount: "1200",
   },
   {
-    Due: "01-15-2026",
+    Due: "2026-01-15",
     Frequency: "Monthly",
     Name: "Car Payment",
     Budget: "Transportation",
     Amount: "300",
   },
   {
-    Due: "01-30-2026",
+    Due: "2026-01-30",
     Frequency: "Monthly",
     Name: "Internet Bill",
     Budget: "Utilities",
@@ -48,14 +48,54 @@ const reocurringExpenses = [
   },
 ];
 
+function advanceDateByFrequency(dateStr: string, frequency: string): string {
+  const date = new Date(dateStr);
+  switch (frequency) {
+    case "Weekly":
+      date.setDate(date.getDate() + 7);
+      break;
+    case "Biweekly":
+      date.setDate(date.getDate() + 14);
+      break;
+    case "Monthly":
+      date.setMonth(date.getMonth() + 1);
+      break;
+    case "Bimonthly":
+      date.setMonth(date.getMonth() + 2);
+      break;
+    case "Quarterly":
+      date.setMonth(date.getMonth() + 3);
+      break;
+    case "Semiannually":
+      date.setMonth(date.getMonth() + 6);
+      break;
+    case "Annually":
+      date.setFullYear(date.getFullYear() + 1);
+      break;
+  }
+  console.log(date.toISOString().split("T")[0]);
+  return date.toISOString().split("T")[0];
+}
+
 function Recurring() {
   const pastDueExpenses = reocurringExpenses.filter(
     (exp) => new Date(exp.Due) < new Date(),
   );
 
   const editRecurringModal = useRef<HTMLDialogElement>(null);
+  const deleteRecurringModal = useRef<HTMLDialogElement>(null);
+  const completeRecurringModal = useRef<HTMLDialogElement>(null);
   const [currentRow, setCurrentRow] = useState<Record<string, any> | null>(
     null,
+  );
+
+  const nextDueDate = useMemo(
+    () =>
+      advanceDateByFrequency(
+        currentRow?.Due || new Date().toISOString().split("T")[0],
+        currentRow?.Frequency,
+      ),
+    [currentRow?.Due, currentRow?.Frequency],
   );
 
   const handleOpenModal = (
@@ -86,11 +126,17 @@ function Recurring() {
             data={reocurringExpenses}
             actions={[
               {
+                action: (row) => handleOpenModal(completeRecurringModal, row),
+                type: "complete",
+              },
+              {
                 action: (row) => handleOpenModal(editRecurringModal, row),
                 type: "edit",
               },
-              { type: "delete" },
-              { type: "complete" },
+              {
+                action: (row) => handleOpenModal(deleteRecurringModal, row),
+                type: "delete",
+              },
             ]}
           />
         </div>
@@ -105,11 +151,17 @@ function Recurring() {
             data={pastDueExpenses}
             actions={[
               {
+                action: (row) => handleOpenModal(completeRecurringModal, row),
+                type: "complete",
+              },
+              {
                 action: (row) => handleOpenModal(editRecurringModal, row),
                 type: "edit",
               },
-              { type: "delete" },
-              { type: "complete" },
+              {
+                action: (row) => handleOpenModal(deleteRecurringModal, row),
+                type: "delete",
+              },
             ]}
           />
         </div>
@@ -145,6 +197,27 @@ function Recurring() {
           { label: "Amount", type: "number", value: currentRow?.Amount },
         ]}
         action="Save"
+      />
+      <InputFormModal
+        id="deleteRecurringModal"
+        ref={deleteRecurringModal}
+        title="Are you sure?"
+        inputs={[{ label: "Id", type: "hidden", value: currentRow?.Id }]}
+        action="Delete"
+      />
+      <InputFormModal
+        id="completeRecurringModal"
+        ref={completeRecurringModal}
+        title="Complete Recurring Expense"
+        inputs={[
+          { label: "Id", type: "hidden", value: currentRow?.Id },
+          {
+            label: "Due",
+            type: "hidden",
+            value: nextDueDate,
+          },
+        ]}
+        action="Complete"
       />
     </div>
   );

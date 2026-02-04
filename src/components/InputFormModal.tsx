@@ -1,11 +1,3 @@
-// Convert mm-dd-yyyy to yyyy-mm-dd for date input
-const formatDateForInput = (dateString?: string | number): string => {
-  if (!dateString) return "";
-  const str = dateString.toString();
-  const [month, day, year] = str.split("-");
-  return `${year}-${month}-${day}`;
-};
-
 type InputBase = {
   label: string;
   value?: string | number;
@@ -23,7 +15,7 @@ type OtherInput = InputBase & {
 
 type InputTypes = SelectInput | OtherInput;
 
-type ActionType = "Add" | "Save" | "Delete";
+type ActionType = "Add" | "Save" | "Delete" | "Complete";
 
 interface InputFormModalProps {
   id: string;
@@ -59,10 +51,7 @@ function InputFormModal({
                 return (
                   <label key={index} className="input mb-4 w-full">
                     <span className="label">{input.label}</span>
-                    <input
-                      type="date"
-                      defaultValue={formatDateForInput(input.value)}
-                    />
+                    <input type="date" defaultValue={input.value} />
                   </label>
                 );
               case "select":
