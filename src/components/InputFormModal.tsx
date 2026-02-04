@@ -27,6 +27,27 @@ interface InputFormModalProps {
   onSubmit?: (data: any) => void;
 }
 
+function handleEditOpenModal(
+  modalRef: React.RefObject<HTMLDialogElement | null>,
+  row: Record<string, any>,
+  setter: (row: Record<string, any> | null) => void,
+) {
+  setter(row);
+  if (modalRef.current) {
+    modalRef.current.showModal();
+  } else {
+    console.error("Modal element not found");
+  }
+}
+
+function handleOpenModal(modalRef: React.RefObject<HTMLDialogElement | null>) {
+  if (modalRef.current) {
+    modalRef.current.showModal();
+  } else {
+    console.error("Modal element not found");
+  }
+}
+
 function InputFormModal({
   id,
   ref,
@@ -110,4 +131,5 @@ function InputFormModal({
   );
 }
 
+export { handleEditOpenModal, handleOpenModal };
 export default InputFormModal;

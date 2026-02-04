@@ -3,7 +3,7 @@ import supabase from "../helpers/supabaseClient";
 import { Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Fab from "../components/Fab";
-import InputFormModal from "../components/InputFormModal";
+import InputFormModal, { handleOpenModal } from "../components/InputFormModal";
 
 const budgets = [
   "Subscription",
@@ -21,16 +21,6 @@ function Wrapper({ children }: { children: JSX.Element }) {
   const expenseModal = useRef<HTMLDialogElement>(null);
   const recurringModal = useRef<HTMLDialogElement>(null);
   const budgetModal = useRef<HTMLDialogElement>(null);
-
-  const handleOpenModal = (
-    modalRef: React.RefObject<HTMLDialogElement | null>,
-  ) => {
-    if (modalRef.current) {
-      modalRef.current.showModal();
-    } else {
-      console.error("Modal element not found");
-    }
-  };
 
   useEffect(() => {
     const getSession = async () => {
@@ -107,8 +97,8 @@ function Wrapper({ children }: { children: JSX.Element }) {
             ref={incomeModal}
             title="Add Income"
             inputs={[
-              { label: "Name", type: "text" },
               { label: "Date", type: "date" },
+              { label: "Name", type: "text" },
               { label: "Amount", type: "number" },
             ]}
             action="Add"
@@ -118,6 +108,7 @@ function Wrapper({ children }: { children: JSX.Element }) {
             ref={expenseModal}
             title="Add Expense"
             inputs={[
+              { label: "Date", type: "date" },
               { label: "Name", type: "text" },
               {
                 label: "Budget",
@@ -125,7 +116,6 @@ function Wrapper({ children }: { children: JSX.Element }) {
                 value: budgets[0],
                 options: budgets,
               },
-              { label: "Date", type: "date" },
               { label: "Amount", type: "number" },
             ]}
             action="Add"
@@ -135,13 +125,6 @@ function Wrapper({ children }: { children: JSX.Element }) {
             ref={recurringModal}
             title="Add Recurring"
             inputs={[
-              { label: "Name", type: "text" },
-              {
-                label: "Budget",
-                type: "select",
-                value: budgets[0],
-                options: budgets,
-              },
               { label: "Due", type: "date" },
               {
                 label: "Frequency",
@@ -157,6 +140,14 @@ function Wrapper({ children }: { children: JSX.Element }) {
                   "Annually",
                 ],
               },
+              { label: "Name", type: "text" },
+              {
+                label: "Budget",
+                type: "select",
+                value: budgets[0],
+                options: budgets,
+              },
+
               { label: "Amount", type: "number" },
             ]}
             action="Add"
@@ -167,7 +158,7 @@ function Wrapper({ children }: { children: JSX.Element }) {
             title="Add Budget"
             inputs={[
               { label: "Name", type: "text" },
-              { label: "Amount", type: "number" },
+              { label: "Budget", type: "number" },
             ]}
             action="Add"
           />

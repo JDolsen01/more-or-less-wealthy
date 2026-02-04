@@ -33,7 +33,9 @@ function Table({ title, data, actions }: TableProps) {
               <tr key={rowIndex} className="hover:bg-base-300">
                 {columns.map((col, colIndex) => (
                   <td key={colIndex} className="whitespace-nowrap">
-                    {row[col]}
+                    {typeof row[col] === "number"
+                      ? `$${row[col].toFixed(2)}`
+                      : row[col]}
                   </td>
                 ))}
                 {actions && actions.length > 0 && (
