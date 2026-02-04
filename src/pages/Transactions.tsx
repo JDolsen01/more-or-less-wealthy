@@ -45,9 +45,14 @@ function Transactions() {
   const editExpenseModal = useRef<HTMLDialogElement | null>(null);
   const deleteIncomeModal = useRef<HTMLDialogElement | null>(null);
   const deleteExpenseModal = useRef<HTMLDialogElement | null>(null);
-  const [currentRow, setCurrentRow] = useState<Record<string, any> | null>(
-    null,
-  );
+  const [currentIncome, setCurrentIncome] = useState<Record<
+    string,
+    any
+  > | null>(null);
+  const [currentExpense, setCurrentExpense] = useState<Record<
+    string,
+    any
+  > | null>(null);
   return (
     <div className="flex flex-col items-center justify-start px-4">
       <h1 className="text-2xl font-bold mt-4">Transactions</h1>
@@ -79,12 +84,12 @@ function Transactions() {
             actions={[
               {
                 action: (row) =>
-                  handleEditOpenModal(editIncomeModal, row, setCurrentRow),
+                  handleEditOpenModal(editIncomeModal, row, setCurrentIncome),
                 type: "edit",
               },
               {
                 action: (row) =>
-                  handleEditOpenModal(deleteIncomeModal, row, setCurrentRow),
+                  handleEditOpenModal(deleteIncomeModal, row, setCurrentIncome),
                 type: "delete",
               },
             ]}
@@ -102,12 +107,16 @@ function Transactions() {
             actions={[
               {
                 action: (row) =>
-                  handleEditOpenModal(editExpenseModal, row, setCurrentRow),
+                  handleEditOpenModal(editExpenseModal, row, setCurrentExpense),
                 type: "edit",
               },
               {
                 action: (row) =>
-                  handleEditOpenModal(deleteExpenseModal, row, setCurrentRow),
+                  handleEditOpenModal(
+                    deleteExpenseModal,
+                    row,
+                    setCurrentExpense,
+                  ),
                 type: "delete",
               },
             ]}
@@ -119,10 +128,10 @@ function Transactions() {
         ref={editIncomeModal}
         title="Edit Income"
         inputs={[
-          { label: "Id", type: "hidden", value: currentRow?.Id },
-          { label: "Date", type: "date", value: currentRow?.Date },
-          { label: "Name", type: "text", value: currentRow?.Name },
-          { label: "Amount", type: "number", value: currentRow?.Amount },
+          { label: "Id", type: "hidden", value: currentIncome?.Id },
+          { label: "Date", type: "date", value: currentIncome?.Date },
+          { label: "Name", type: "text", value: currentIncome?.Name },
+          { label: "Amount", type: "number", value: currentIncome?.Amount },
         ]}
         action="Save"
       />
@@ -131,16 +140,16 @@ function Transactions() {
         ref={editExpenseModal}
         title="Edit Expense"
         inputs={[
-          { label: "Id", type: "hidden", value: currentRow?.Id },
-          { label: "Date", type: "date", value: currentRow?.Date },
-          { label: "Name", type: "text", value: currentRow?.Name },
+          { label: "Id", type: "hidden", value: currentExpense?.Id },
+          { label: "Date", type: "date", value: currentExpense?.Date },
+          { label: "Name", type: "text", value: currentExpense?.Name },
           {
             label: "Budget",
             type: "select",
             options: budgets,
-            value: currentRow?.Budget || budgets[0],
+            value: currentExpense?.Budget || budgets[0],
           },
-          { label: "Amount", type: "number", value: currentRow?.Amount },
+          { label: "Amount", type: "number", value: currentExpense?.Amount },
         ]}
         action="Save"
       />
@@ -148,14 +157,14 @@ function Transactions() {
         id="deleteIncomeModal"
         ref={deleteIncomeModal}
         title="Delete Income?"
-        inputs={[{ label: "Id", type: "hidden", value: currentRow?.Id }]}
+        inputs={[{ label: "Id", type: "hidden", value: currentIncome?.Id }]}
         action="Delete"
       />
       <InputFormModal
         id="deleteExpenseModal"
         ref={deleteExpenseModal}
         title="Delete Expense?"
-        inputs={[{ label: "Id", type: "hidden", value: currentRow?.Id }]}
+        inputs={[{ label: "Id", type: "hidden", value: currentExpense?.Id }]}
         action="Delete"
       />
     </div>

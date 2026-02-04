@@ -86,17 +86,18 @@ function Recurring() {
   const editRecurringModal = useRef<HTMLDialogElement>(null);
   const deleteRecurringModal = useRef<HTMLDialogElement>(null);
   const completeRecurringModal = useRef<HTMLDialogElement>(null);
-  const [currentRow, setCurrentRow] = useState<Record<string, any> | null>(
-    null,
-  );
+  const [currentRecurring, setCurrentRecurring] = useState<Record<
+    string,
+    any
+  > | null>(null);
 
   const nextDueDate = useMemo(
     () =>
       advanceDateByFrequency(
-        currentRow?.Due || new Date().toISOString().split("T")[0],
-        currentRow?.Frequency,
+        currentRecurring?.Due || new Date().toISOString().split("T")[0],
+        currentRecurring?.Frequency,
       ),
-    [currentRow?.Due, currentRow?.Frequency],
+    [currentRecurring?.Due, currentRecurring?.Frequency],
   );
 
   return (
@@ -119,18 +120,26 @@ function Recurring() {
                   handleEditOpenModal(
                     completeRecurringModal,
                     row,
-                    setCurrentRow,
+                    setCurrentRecurring,
                   ),
                 type: "complete",
               },
               {
                 action: (row) =>
-                  handleEditOpenModal(editRecurringModal, row, setCurrentRow),
+                  handleEditOpenModal(
+                    editRecurringModal,
+                    row,
+                    setCurrentRecurring,
+                  ),
                 type: "edit",
               },
               {
                 action: (row) =>
-                  handleEditOpenModal(deleteRecurringModal, row, setCurrentRow),
+                  handleEditOpenModal(
+                    deleteRecurringModal,
+                    row,
+                    setCurrentRecurring,
+                  ),
                 type: "delete",
               },
             ]}
@@ -151,18 +160,26 @@ function Recurring() {
                   handleEditOpenModal(
                     completeRecurringModal,
                     row,
-                    setCurrentRow,
+                    setCurrentRecurring,
                   ),
                 type: "complete",
               },
               {
                 action: (row) =>
-                  handleEditOpenModal(editRecurringModal, row, setCurrentRow),
+                  handleEditOpenModal(
+                    editRecurringModal,
+                    row,
+                    setCurrentRecurring,
+                  ),
                 type: "edit",
               },
               {
                 action: (row) =>
-                  handleEditOpenModal(deleteRecurringModal, row, setCurrentRow),
+                  handleEditOpenModal(
+                    deleteRecurringModal,
+                    row,
+                    setCurrentRecurring,
+                  ),
                 type: "delete",
               },
             ]}
@@ -174,12 +191,12 @@ function Recurring() {
         ref={editRecurringModal}
         title="Edit Recurring Expense"
         inputs={[
-          { label: "Id", type: "hidden", value: currentRow?.Id },
-          { label: "Due", type: "date", value: currentRow?.Due },
+          { label: "Id", type: "hidden", value: currentRecurring?.Id },
+          { label: "Due", type: "date", value: currentRecurring?.Due },
           {
             label: "Frequency",
             type: "select",
-            value: currentRow?.Frequency || "Monthly",
+            value: currentRecurring?.Frequency || "Monthly",
             options: [
               "Weekly",
               "Biweekly",
@@ -190,14 +207,14 @@ function Recurring() {
               "Annually",
             ],
           },
-          { label: "Name", type: "text", value: currentRow?.Name },
+          { label: "Name", type: "text", value: currentRecurring?.Name },
           {
             label: "Budget",
             type: "select",
-            value: currentRow?.Budget || budgets[0],
+            value: currentRecurring?.Budget || budgets[0],
             options: budgets,
           },
-          { label: "Amount", type: "number", value: currentRow?.Amount },
+          { label: "Amount", type: "number", value: currentRecurring?.Amount },
         ]}
         action="Save"
       />
@@ -205,7 +222,7 @@ function Recurring() {
         id="deleteRecurringModal"
         ref={deleteRecurringModal}
         title="Are you sure?"
-        inputs={[{ label: "Id", type: "hidden", value: currentRow?.Id }]}
+        inputs={[{ label: "Id", type: "hidden", value: currentRecurring?.Id }]}
         action="Delete"
       />
       <InputFormModal
@@ -213,7 +230,7 @@ function Recurring() {
         ref={completeRecurringModal}
         title="Complete Recurring Expense"
         inputs={[
-          { label: "Id", type: "hidden", value: currentRow?.Id },
+          { label: "Id", type: "hidden", value: currentRecurring?.Id },
           {
             label: "Due",
             type: "hidden",

@@ -1,4 +1,8 @@
+import { useRef, useState } from "react";
 import Table from "../components/Table";
+import InputFormModal, {
+  handleEditOpenModal,
+} from "../components/InputFormModal";
 
 const budgets = [
   { Name: "Marketing", Budget: 5000, Spent: 2500 },
@@ -8,6 +12,13 @@ const budgets = [
 ];
 
 function Budgets() {
+  const editBudgetModal = useRef<HTMLDialogElement>(null);
+  const deleteBudgetModal = useRef<HTMLDialogElement>(null);
+  const [currentBudget, setCurrentBudget] = useState<Record<
+    string,
+    any
+  > | null>(null);
+
   return (
     <div className="flex flex-col items-center justify-start px-4">
       <h1 className="text-2xl font-bold mt-4">Budgets</h1>
@@ -29,9 +40,41 @@ function Budgets() {
           aria-label="Overspent"
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
-          <Table data={budgets.filter((b) => b.Spent > b.Budget)} />
+          <Table
+            data={budgets.filter((b) => b.Spent > b.Budget)}
+            actions={[
+              {
+                action: (row) =>
+                  handleEditOpenModal(editBudgetModal, row, setCurrentBudget),
+                type: "edit",
+              },
+              {
+                action: (row) =>
+                  handleEditOpenModal(deleteBudgetModal, row, setCurrentBudget),
+                type: "delete",
+              },
+            ]}
+          />
         </div>
       </div>
+      <InputFormModal
+        id="editBudgetModal"
+        ref={editBudgetModal}
+        title="Edit Budget"
+        inputs={[
+          { label: "Name", type: "text", value: currentBudget?.Name },
+          { label: "Budget", type: "number", value: currentBudget?.Budget },
+          { label: "Spent", type: "number", value: currentBudget?.Spent },
+        ]}
+        action="Save"
+      />
+      <InputFormModal
+        id="deleteBudgetModal"
+        ref={deleteBudgetModal}
+        title="Delete Budget?"
+        inputs={[{ label: "Id", type: "hidden", value: currentBudget?.Id }]}
+        action="Delete"
+      />
     </div>
   );
 }
