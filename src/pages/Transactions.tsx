@@ -3,6 +3,7 @@ import InputFormModal, {
   handleEditOpenModal,
 } from "../components/InputFormModal";
 import Table from "../components/Table";
+import { getIncome, updateIncome } from "../helpers/income";
 
 const budgets = [
   "Subscription",
@@ -14,10 +15,14 @@ const budgets = [
   "Food",
 ];
 
-const income = [
-  { Date: "2024-01-15", Name: "Salary", Amount: 3000 },
-  { Date: "2024-01-30", Name: "Freelance Project", Amount: 800 },
-];
+const initialIncome = await getIncome().then((data) =>
+  data.map((item) => ({
+    Id: item.id,
+    Date: item.date,
+    Name: item.name,
+    Amount: item.amount,
+  })),
+);
 
 const expenses = [
   {
@@ -41,10 +46,21 @@ const expenses = [
 ];
 
 function Transactions() {
-  const editIncomeModal = useRef<HTMLDialogElement | null>(null);
-  const editExpenseModal = useRef<HTMLDialogElement | null>(null);
-  const deleteIncomeModal = useRef<HTMLDialogElement | null>(null);
-  const deleteExpenseModal = useRef<HTMLDialogElement | null>(null);
+  const [income, setIncome] =
+    useState<Array<Record<string, any>>>(initialIncome);
+
+  const editIncomeModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
+  const editExpenseModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
+  const deleteIncomeModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
+  const deleteExpenseModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
   const [currentIncome, setCurrentIncome] = useState<Record<
     string,
     any
@@ -134,6 +150,7 @@ function Transactions() {
           { label: "Amount", type: "number", value: currentIncome?.Amount },
         ]}
         action="Save"
+        onSubmit={updateIncome}
       />
       <InputFormModal
         id="editExpenseModal"

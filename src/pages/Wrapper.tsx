@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Fab from "../components/Fab";
 import InputFormModal, { handleOpenModal } from "../components/InputFormModal";
+import { createIncome } from "../helpers/income";
 
 const budgets = [
   "Subscription",
@@ -17,10 +18,18 @@ function Wrapper({ children }: { children: JSX.Element }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const incomeModal = useRef<HTMLDialogElement>(null);
-  const expenseModal = useRef<HTMLDialogElement>(null);
-  const recurringModal = useRef<HTMLDialogElement>(null);
-  const budgetModal = useRef<HTMLDialogElement>(null);
+  const incomeModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
+  const expenseModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
+  const recurringModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
+  const budgetModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
 
   useEffect(() => {
     const getSession = async () => {
@@ -102,6 +111,7 @@ function Wrapper({ children }: { children: JSX.Element }) {
               { label: "Amount", type: "number" },
             ]}
             action="Add"
+            onSubmit={createIncome}
           />
           <InputFormModal
             id="expenseModal"

@@ -19,7 +19,7 @@ type ActionType = "Add" | "Save" | "Delete" | "Complete";
 
 interface InputFormModalProps {
   id: string;
-  ref: React.Ref<HTMLDialogElement>;
+  ref: React.RefObject<HTMLDialogElement>;
   title: string;
   inputs: InputTypes[];
   action: ActionType;
@@ -57,22 +57,40 @@ function InputFormModal({
   onClose,
   onSubmit,
 }: InputFormModalProps) {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    if (onSubmit) {
+      onSubmit(formData); // Trigger parent callback with formData
+    }
+    ref.current?.close();
+  };
+
   return (
     <dialog id={id} className="modal modal-bottom sm:modal-middle" ref={ref}>
       <div className="modal-box">
         <h3 className="font-bold text-lg mb-2">{title}</h3>
-        <form id={`${id}-form`} onSubmit={onSubmit}>
+        <form id={`${id}-form`} onSubmit={handleSubmit}>
           {inputs.map((input, index) => {
             switch (input.type) {
               case "hidden":
                 return (
-                  <input key={index} type="hidden" defaultValue={input.value} />
+                  <input
+                    key={index}
+                    name={input.label.toLowerCase()}
+                    type="hidden"
+                    defaultValue={input.value}
+                  />
                 );
               case "date":
                 return (
                   <label key={index} className="input mb-4 w-full">
                     <span className="label">{input.label}</span>
-                    <input type="date" defaultValue={input.value} />
+                    <input
+                      type="date"
+                      name={input.label.toLowerCase()}
+                      defaultValue={input.value}
+                    />
                   </label>
                 );
               case "select":
@@ -81,6 +99,7 @@ function InputFormModal({
                     <span className="label">{input.label}</span>
                     <select
                       key={`${input.label}-${input.value}`}
+                      name={input.label.toLowerCase()}
                       defaultValue={input.value}
                       className="select"
                     >
@@ -98,8 +117,10 @@ function InputFormModal({
                     <span>{input.label}</span>
                     <input
                       type={input.type}
+                      name={input.label.toLowerCase()}
                       placeholder={input.label}
                       defaultValue={input.value}
+                      step={input.type === "number" ? "0.01" : undefined}
                       className="input input-md mb-4 w-full"
                     />
                   </label>

@@ -83,9 +83,15 @@ function Recurring() {
     (exp) => new Date(exp.Due) < new Date(),
   );
 
-  const editRecurringModal = useRef<HTMLDialogElement>(null);
-  const deleteRecurringModal = useRef<HTMLDialogElement>(null);
-  const completeRecurringModal = useRef<HTMLDialogElement>(null);
+  const editRecurringModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
+  const deleteRecurringModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
+  const completeRecurringModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
   const [currentRecurring, setCurrentRecurring] = useState<Record<
     string,
     any

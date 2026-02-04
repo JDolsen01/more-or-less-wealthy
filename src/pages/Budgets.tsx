@@ -12,8 +12,12 @@ const budgets = [
 ];
 
 function Budgets() {
-  const editBudgetModal = useRef<HTMLDialogElement>(null);
-  const deleteBudgetModal = useRef<HTMLDialogElement>(null);
+  const editBudgetModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
+  const deleteBudgetModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
   const [currentBudget, setCurrentBudget] = useState<Record<
     string,
     any
@@ -31,7 +35,21 @@ function Budgets() {
           defaultChecked
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
-          <Table data={budgets} />
+          <Table
+            data={budgets}
+            actions={[
+              {
+                action: (row) =>
+                  handleEditOpenModal(editBudgetModal, row, setCurrentBudget),
+                type: "edit",
+              },
+              {
+                action: (row) =>
+                  handleEditOpenModal(deleteBudgetModal, row, setCurrentBudget),
+                type: "delete",
+              },
+            ]}
+          />
         </div>
         <input
           type="radio"
