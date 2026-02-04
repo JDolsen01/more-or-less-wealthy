@@ -73,7 +73,6 @@ function advanceDateByFrequency(dateStr: string, frequency: string): string {
       date.setFullYear(date.getFullYear() + 1);
       break;
   }
-  console.log(date.toISOString().split("T")[0]);
   return date.toISOString().split("T")[0];
 }
 
