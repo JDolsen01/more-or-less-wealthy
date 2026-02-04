@@ -1,9 +1,9 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import InputFormModal, {
   handleEditOpenModal,
 } from "../components/InputFormModal";
 import Table from "../components/Table";
-import { getIncome, updateIncome } from "../helpers/income";
+import { deleteIncome, getIncomes, updateIncome } from "../helpers/income";
 
 const budgets = [
   "Subscription",
@@ -15,39 +15,43 @@ const budgets = [
   "Food",
 ];
 
-const initialIncome = await getIncome().then((data) =>
-  data.map((item) => ({
-    Id: item.id,
-    Date: item.date,
-    Name: item.name,
-    Amount: item.amount,
-  })),
-);
-
 const expenses = [
   {
-    Date: "2024-01-10",
-    Name: "Groceries",
-    Budget: "Food",
-    Amount: 150,
+    date: "2024-01-10",
+    name: "Groceries",
+    budget: "Food",
+    amount: 150,
   },
   {
-    Date: "2024-01-12",
-    Name: "Electricity Bill",
-    Budget: "Utilities",
-    Amount: 60,
+    date: "2024-01-12",
+    name: "Electricity Bill",
+    budget: "Utilities",
+    amount: 60,
   },
   {
-    Date: "2024-01-20",
-    Name: "Dining Out",
-    Budget: "Entertainment",
-    Amount: 80,
+    date: "2024-01-20",
+    name: "Dining Out",
+    budget: "Entertainment",
+    amount: 80,
   },
 ];
 
 function Transactions() {
-  const [income, setIncome] =
-    useState<Array<Record<string, any>>>(initialIncome);
+  const [income, setIncome] = useState<Array<Record<string, any>>>([]);
+  useEffect(() => {
+    getIncomes().then((data) =>
+      setIncome(
+        data.map((item) => ({
+          id: item.id,
+          date: item.date,
+          name: item.name,
+          amount: item.amount,
+        })),
+      ),
+    );
+  }, []);
+  const [currentIncome, setCurrentIncome] = useState<Record<string, any>>({});
+  const [currentExpense, setCurrentExpense] = useState<Record<string, any>>({});
 
   const editIncomeModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
@@ -61,14 +65,6 @@ function Transactions() {
   const deleteExpenseModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
   );
-  const [currentIncome, setCurrentIncome] = useState<Record<
-    string,
-    any
-  > | null>(null);
-  const [currentExpense, setCurrentExpense] = useState<Record<
-    string,
-    any
-  > | null>(null);
   return (
     <div className="flex flex-col items-center justify-start px-4">
       <h1 className="text-2xl font-bold mt-4">Transactions</h1>
@@ -84,8 +80,8 @@ function Transactions() {
           <Table
             data={[
               ...income,
-              ...expenses.map(({ Budget, ...rest }) => rest),
-            ].sort((a, b) => (a.Date > b.Date ? 1 : -1))}
+              ...expenses.map(({ budget, ...rest }) => rest),
+            ].sort((a, b) => (a.date > b.date ? 1 : -1))}
           />
         </div>
         <input
@@ -144,10 +140,10 @@ function Transactions() {
         ref={editIncomeModal}
         title="Edit Income"
         inputs={[
-          { label: "Id", type: "hidden", value: currentIncome?.Id },
-          { label: "Date", type: "date", value: currentIncome?.Date },
-          { label: "Name", type: "text", value: currentIncome?.Name },
-          { label: "Amount", type: "number", value: currentIncome?.Amount },
+          { label: "Id", type: "hidden", value: currentIncome?.id },
+          { label: "Date", type: "date", value: currentIncome?.date },
+          { label: "Name", type: "text", value: currentIncome?.name },
+          { label: "Amount", type: "number", value: currentIncome?.amount },
         ]}
         action="Save"
         onSubmit={updateIncome}
@@ -157,16 +153,16 @@ function Transactions() {
         ref={editExpenseModal}
         title="Edit Expense"
         inputs={[
-          { label: "Id", type: "hidden", value: currentExpense?.Id },
-          { label: "Date", type: "date", value: currentExpense?.Date },
-          { label: "Name", type: "text", value: currentExpense?.Name },
+          { label: "Id", type: "hidden", value: currentExpense?.id },
+          { label: "Date", type: "date", value: currentExpense?.date },
+          { label: "Name", type: "text", value: currentExpense?.name },
           {
             label: "Budget",
             type: "select",
             options: budgets,
-            value: currentExpense?.Budget || budgets[0],
+            value: currentExpense?.budget || budgets[0],
           },
-          { label: "Amount", type: "number", value: currentExpense?.Amount },
+          { label: "Amount", type: "number", value: currentExpense?.amount },
         ]}
         action="Save"
       />
@@ -174,14 +170,15 @@ function Transactions() {
         id="deleteIncomeModal"
         ref={deleteIncomeModal}
         title="Delete Income?"
-        inputs={[{ label: "Id", type: "hidden", value: currentIncome?.Id }]}
+        inputs={[{ label: "Id", type: "hidden", value: currentIncome?.id }]}
         action="Delete"
+        onSubmit={deleteIncome}
       />
       <InputFormModal
         id="deleteExpenseModal"
         ref={deleteExpenseModal}
         title="Delete Expense?"
-        inputs={[{ label: "Id", type: "hidden", value: currentExpense?.Id }]}
+        inputs={[{ label: "Id", type: "hidden", value: currentExpense?.id }]}
         action="Delete"
       />
     </div>

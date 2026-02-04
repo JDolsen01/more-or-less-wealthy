@@ -6,7 +6,7 @@ interface TableProps {
   title?: string;
   data: Array<Record<string, any>>;
   actions?: {
-    action?: (row: Record<string, any>) => void;
+    action: (row: Record<string, any>) => void;
     type: ActionType;
   }[];
 }
@@ -24,10 +24,10 @@ function Table({ title, data, actions }: TableProps) {
                 <th
                   key={index}
                   className={
-                    "whitespace-nowrap " + (col === "Id" ? "hidden" : "")
+                    "whitespace-nowrap " + (col === "id" ? "hidden" : "")
                   }
                 >
-                  {col}
+                  {col.charAt(0).toUpperCase() + col.slice(1)}
                 </th>
               ))}
               {actions && actions.length > 0 && <th></th>}
@@ -40,7 +40,7 @@ function Table({ title, data, actions }: TableProps) {
                   <td
                     key={colIndex}
                     className={
-                      "whitespace-nowrap " + (col === "Id" ? "hidden" : "")
+                      "whitespace-nowrap " + (col === "id" ? "hidden" : "")
                     }
                   >
                     {typeof row[col] === "number"
@@ -57,7 +57,7 @@ function Table({ title, data, actions }: TableProps) {
                       <button
                         className="btn btn-xs btn-circle"
                         key={action.type}
-                        onClick={() => action.action?.(row)}
+                        onClick={() => action.action(row)}
                       >
                         <Icon type={action.type} />
                       </button>

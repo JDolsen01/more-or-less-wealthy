@@ -1,5 +1,12 @@
 import supabase from "./supabaseClient";
 
+export type Income = {
+  id: string;
+  date: string;
+  name: string;
+  amount: number;
+};
+
 export async function createIncome(formData: FormData) {
   const date = formData.get("date") as string;
   const name = formData.get("name") as string;
@@ -21,14 +28,10 @@ export async function createIncome(formData: FormData) {
   return data;
 }
 
-export async function getIncome() {
-  const user = await supabase.auth
-    .getUser()
-    .then(({ data: { user } }) => user?.id);
+export async function getIncomes() {
   const { data, error } = await supabase
     .from("income")
     .select("*")
-    .eq("user_id", user)
     .order("date", { ascending: true });
   if (error) {
     throw error;
@@ -50,6 +53,15 @@ export async function updateIncome(formData: FormData) {
       amount: amount ? parseFloat(amount.toString()) : null,
     })
     .eq("id", id);
+  if (error) {
+    throw error;
+  }
+  return data;
+}
+
+export async function deleteIncome(formData: FormData) {
+  const id = formData.get("id") as string;
+  const { data, error } = await supabase.from("income").delete().eq("id", id);
   if (error) {
     throw error;
   }

@@ -30,7 +30,7 @@ interface InputFormModalProps {
 function handleEditOpenModal(
   modalRef: React.RefObject<HTMLDialogElement | null>,
   row: Record<string, any>,
-  setter: (row: Record<string, any> | null) => void,
+  setter: (row: Record<string, any>) => void,
 ) {
   setter(row);
   if (modalRef.current) {
