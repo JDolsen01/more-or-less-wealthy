@@ -10,11 +10,11 @@ function Home() {
           </Link>
         </div>
         <div className="navbar-end">
-          <Link className="btn" to="/login">
-            Login
-          </Link>
-          <Link className="btn btn-primary ml-2" to="/signup">
+          <Link className="btn" to="/signup">
             Signup
+          </Link>
+          <Link className="btn btn-primary ml-2" to="/login">
+            Login
           </Link>
         </div>
       </div>
