@@ -5,7 +5,10 @@ type InputBase = {
 
 type SelectInput = InputBase & {
   type: "select";
-  options: string[]; // required when type is "select"
+  options: {
+    name: string;
+    value: string | number;
+  }[]; // required when type is "select"
 };
 
 type OtherInput = InputBase & {
@@ -105,8 +108,8 @@ function InputFormModal({
                       className="select"
                     >
                       {input.options.map((option, optIndex) => (
-                        <option key={optIndex} value={option}>
-                          {option}
+                        <option key={optIndex} value={option.value}>
+                          {option.name}
                         </option>
                       ))}
                     </select>

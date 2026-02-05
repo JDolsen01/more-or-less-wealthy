@@ -125,7 +125,7 @@ function Budgets() {
           );
         }}
       />
-      <FabModal setBudgets={setBudgets} />
+      <FabModal budgets={budgets} setBudgets={setBudgets} />
     </div>
   );
 }

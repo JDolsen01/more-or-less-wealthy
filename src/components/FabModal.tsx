@@ -2,7 +2,7 @@ import { useRef } from "react";
 import Fab from "../components/Fab";
 import InputFormModal, { handleOpenModal } from "../components/InputFormModal";
 import { createIncome, getIncomes, type Income } from "../helpers/income";
-import type { Expense } from "../helpers/expense";
+import { createExpense, getExpenses, type Expense } from "../helpers/expense";
 import type { Recurring } from "../helpers/recurring";
 import { createBudget, getBudgets, type Budget } from "../helpers/budget";
 
@@ -10,18 +10,16 @@ interface FabModalProps {
   setIncomes?: React.Dispatch<React.SetStateAction<Income[]>>;
   setExpenses?: React.Dispatch<React.SetStateAction<Expense[]>>;
   setRecurrings?: React.Dispatch<React.SetStateAction<Recurring[]>>;
+  budgets: Budget[];
   setBudgets?: React.Dispatch<React.SetStateAction<Budget[]>>;
 }
 
-const budgets = [
-  "Subscription",
-  "Housing",
-  "Transportation",
-  "Utilities",
-  "Groceries",
-];
-
-function FabModal({ setIncomes, setBudgets }: FabModalProps) {
+function FabModal({
+  setIncomes,
+  setExpenses,
+  budgets,
+  setBudgets,
+}: FabModalProps) {
   const incomeModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
   );
@@ -96,11 +94,28 @@ function FabModal({ setIncomes, setBudgets }: FabModalProps) {
           {
             label: "Budget",
             type: "select",
-            value: budgets[0],
-            options: budgets,
+            value: budgets[0]?.id,
+            options: budgets.map((budget) => ({
+              name: budget.name,
+              value: budget.id,
+            })),
           },
           { label: "Amount", type: "number" },
         ]}
+        onSubmit={async (formData) => {
+          await createExpense(formData);
+          if (setExpenses) {
+            const expenses = await getExpenses();
+            const mapped = expenses.map((item) => ({
+              id: item.id,
+              date: item.date,
+              name: item.name,
+              budget: item.budget,
+              amount: item.amount,
+            }));
+            setExpenses(mapped);
+          }
+        }}
         action="Add"
       />
       <InputFormModal
@@ -114,21 +129,24 @@ function FabModal({ setIncomes, setBudgets }: FabModalProps) {
             type: "select",
             value: "Monthly",
             options: [
-              "Weekly",
-              "Biweekly",
-              "Monthly",
-              "Bimonthly",
-              "Quarterly",
-              "Semiannually",
-              "Annually",
+              { name: "Weekly", value: "weekly" },
+              { name: "Biweekly", value: "biweekly" },
+              { name: "Monthly", value: "monthly" },
+              { name: "Bimonthly", value: "bimonthly" },
+              { name: "Quarterly", value: "quarterly" },
+              { name: "Semiannually", value: "semiannually" },
+              { name: "Annually", value: "annually" },
             ],
           },
           { label: "Name", type: "text" },
           {
             label: "Budget",
             type: "select",
-            value: budgets[0],
-            options: budgets,
+            value: budgets[0]?.id,
+            options: budgets.map((budget) => ({
+              name: budget.name,
+              value: budget.id,
+            })),
           },
 
           { label: "Amount", type: "number" },

@@ -1,17 +1,10 @@
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import InputFormModal, {
   handleEditOpenModal,
 } from "../components/InputFormModal";
 import Table from "../components/Table";
 import FabModal from "../components/FabModal";
-
-const budgets = [
-  "Subscription",
-  "Housing",
-  "Transportation",
-  "Utilities",
-  "Groceries",
-];
+import { getBudgets, type Budget } from "../helpers/budget";
 
 const reocurringExpenses = [
   {
@@ -93,6 +86,19 @@ function Recurring() {
   const completeRecurringModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
   );
+
+  const [budgets, setBudgets] = useState<Array<Budget>>([]);
+  useEffect(() => {
+    getBudgets().then((data) =>
+      setBudgets(
+        data.map((item) => ({
+          id: item.id,
+          name: item.name,
+          budget: item.budget,
+        })),
+      ),
+    );
+  }, []);
   const [currentRecurring, setCurrentRecurring] = useState<Record<
     string,
     any
@@ -205,21 +211,24 @@ function Recurring() {
             type: "select",
             value: currentRecurring?.Frequency || "Monthly",
             options: [
-              "Weekly",
-              "Biweekly",
-              "Monthly",
-              "Bimonthly",
-              "Quarterly",
-              "Semiannually",
-              "Annually",
+              { name: "Weekly", value: "weekly" },
+              { name: "Biweekly", value: "biweekly" },
+              { name: "Monthly", value: "monthly" },
+              { name: "Bimonthly", value: "bimonthly" },
+              { name: "Quarterly", value: "quarterly" },
+              { name: "Semiannually", value: "semiannually" },
+              { name: "Annually", value: "annually" },
             ],
           },
           { label: "Name", type: "text", value: currentRecurring?.Name },
           {
             label: "Budget",
             type: "select",
-            value: currentRecurring?.Budget || budgets[0],
-            options: budgets,
+            value: currentRecurring?.Budget || budgets[0]?.id,
+            options: budgets.map((budget) => ({
+              name: budget.name,
+              value: budget.id,
+            })),
           },
           { label: "Amount", type: "number", value: currentRecurring?.Amount },
         ]}
@@ -246,7 +255,7 @@ function Recurring() {
         ]}
         action="Complete"
       />
-      <FabModal />
+      <FabModal budgets={budgets} setBudgets={setBudgets} />
     </div>
   );
 }

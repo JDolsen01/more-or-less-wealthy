@@ -10,37 +10,13 @@ import {
   type Income,
 } from "../helpers/income";
 import FabModal from "../components/FabModal";
-
-const budgets = [
-  "Subscription",
-  "Housing",
-  "Transportation",
-  "Utilities",
-  "Groceries",
-  "Entertainment",
-  "Food",
-];
-
-const expenses = [
-  {
-    date: "2024-01-10",
-    name: "Groceries",
-    budget: "Food",
-    amount: 150,
-  },
-  {
-    date: "2024-01-12",
-    name: "Electricity Bill",
-    budget: "Utilities",
-    amount: 60,
-  },
-  {
-    date: "2024-01-20",
-    name: "Dining Out",
-    budget: "Entertainment",
-    amount: 80,
-  },
-];
+import { type Budget, getBudgets } from "../helpers/budget";
+import {
+  deleteExpense,
+  getExpenses,
+  updateExpense,
+  type Expense,
+} from "../helpers/expense";
 
 function Transactions() {
   const [incomes, setIncomes] = useState<Array<Income>>([]);
@@ -51,6 +27,32 @@ function Transactions() {
           id: item.id,
           date: item.date,
           name: item.name,
+          amount: item.amount,
+        })),
+      ),
+    );
+  }, []);
+  const [budgets, setBudgets] = useState<Array<Budget>>([]);
+  useEffect(() => {
+    getBudgets().then((data) =>
+      setBudgets(
+        data.map((item) => ({
+          id: item.id,
+          name: item.name,
+          budget: item.budget,
+        })),
+      ),
+    );
+  }, []);
+  const [expenses, setExpenses] = useState<Array<Expense>>([]);
+  useEffect(() => {
+    getExpenses().then((data) =>
+      setExpenses(
+        data.map((item) => ({
+          id: item.id,
+          date: item.date,
+          name: item.name,
+          budget: item.budget,
           amount: item.amount,
         })),
       ),
@@ -179,11 +181,30 @@ function Transactions() {
           {
             label: "Budget",
             type: "select",
-            options: budgets,
-            value: currentExpense?.budget || budgets[0],
+            options: budgets.map((budget) => ({
+              name: budget.name,
+              value: budget.id,
+            })),
+            value: currentExpense?.budget || budgets[0]?.id,
           },
           { label: "Amount", type: "number", value: currentExpense?.amount },
         ]}
+        onSubmit={async (formData) => {
+          await updateExpense(formData);
+          setExpenses((prev) =>
+            prev.map((expense) =>
+              String(expense.id) === String(formData.get("id"))
+                ? {
+                    ...expense,
+                    date: formData.get("date"),
+                    name: formData.get("name"),
+                    budget: formData.get("budget"),
+                    amout: formData.get("amount"),
+                  }
+                : expense,
+            ),
+          );
+        }}
         action="Save"
       />
       <InputFormModal
@@ -207,8 +228,21 @@ function Transactions() {
         title="Delete Expense?"
         inputs={[{ label: "Id", type: "hidden", value: currentExpense?.id }]}
         action="Delete"
+        onSubmit={async (formData) => {
+          await deleteExpense(formData);
+          setExpenses((prev) =>
+            prev.filter(
+              (expense) => String(expense.id) !== String(formData.get("id")),
+            ),
+          );
+        }}
       />
-      <FabModal setIncomes={setIncomes} />
+      <FabModal
+        setIncomes={setIncomes}
+        setExpenses={setExpenses}
+        budgets={budgets}
+        setBudgets={setBudgets}
+      />
     </div>
   );
 }
