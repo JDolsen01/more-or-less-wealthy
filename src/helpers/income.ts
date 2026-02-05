@@ -25,6 +25,7 @@ export async function createIncome(formData: FormData) {
   if (error) {
     throw error;
   }
+  console.log("Creating income");
   return data;
 }
 
@@ -36,6 +37,7 @@ export async function getIncomes() {
   if (error) {
     throw error;
   }
+  console.log("Getting incomes");
   return data;
 }
 
@@ -56,6 +58,7 @@ export async function updateIncome(formData: FormData) {
   if (error) {
     throw error;
   }
+  console.log("Updating income");
   return data;
 }
 
@@ -65,5 +68,6 @@ export async function deleteIncome(formData: FormData) {
   if (error) {
     throw error;
   }
+  console.log("Deleting income");
   return data;
 }

@@ -3,8 +3,13 @@ import InputFormModal, {
   handleEditOpenModal,
 } from "../components/InputFormModal";
 import Table from "../components/Table";
-import { deleteIncome, getIncomes, updateIncome } from "../helpers/income";
-import NotificationBanner from "../components/NotificationBanner";
+import {
+  deleteIncome,
+  getIncomes,
+  updateIncome,
+  type Income,
+} from "../helpers/income";
+import FabModal from "../components/FabModal";
 
 const budgets = [
   "Subscription",
@@ -38,10 +43,10 @@ const expenses = [
 ];
 
 function Transactions() {
-  const [income, setIncome] = useState<Array<Record<string, any>>>([]);
+  const [incomes, setIncomes] = useState<Array<Income>>([]);
   useEffect(() => {
     getIncomes().then((data) =>
-      setIncome(
+      setIncomes(
         data.map((item) => ({
           id: item.id,
           date: item.date,
@@ -80,7 +85,7 @@ function Transactions() {
         <div className="tab-content border-base-300 bg-base-100 p-4">
           <Table
             data={[
-              ...income,
+              ...incomes,
               ...expenses.map(({ budget, ...rest }) => rest),
             ].sort((a, b) => (a.date > b.date ? 1 : -1))}
           />
@@ -93,7 +98,7 @@ function Transactions() {
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
           <Table
-            data={income}
+            data={incomes}
             actions={[
               {
                 action: (row) =>
@@ -182,6 +187,7 @@ function Transactions() {
         inputs={[{ label: "Id", type: "hidden", value: currentExpense?.id }]}
         action="Delete"
       />
+      <FabModal setIncomes={setIncomes} />
     </div>
   );
 }

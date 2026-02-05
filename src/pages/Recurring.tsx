@@ -3,6 +3,7 @@ import InputFormModal, {
   handleEditOpenModal,
 } from "../components/InputFormModal";
 import Table from "../components/Table";
+import FabModal from "../components/FabModal";
 
 const budgets = [
   "Subscription",
@@ -245,6 +246,7 @@ function Recurring() {
         ]}
         action="Complete"
       />
+      <FabModal />
     </div>
   );
 }

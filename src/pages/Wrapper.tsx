@@ -1,35 +1,11 @@
-import { useEffect, useRef, useState, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import supabase from "../helpers/supabaseClient";
 import { Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import Fab from "../components/Fab";
-import InputFormModal, { handleOpenModal } from "../components/InputFormModal";
-import { createIncome } from "../helpers/income";
-
-const budgets = [
-  "Subscription",
-  "Housing",
-  "Transportation",
-  "Utilities",
-  "Groceries",
-];
 
 function Wrapper({ children }: { children: JSX.Element }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const incomeModal = useRef<HTMLDialogElement>(
-    null as unknown as HTMLDialogElement,
-  );
-  const expenseModal = useRef<HTMLDialogElement>(
-    null as unknown as HTMLDialogElement,
-  );
-  const recurringModal = useRef<HTMLDialogElement>(
-    null as unknown as HTMLDialogElement,
-  );
-  const budgetModal = useRef<HTMLDialogElement>(
-    null as unknown as HTMLDialogElement,
-  );
 
   useEffect(() => {
     const getSession = async () => {
@@ -75,102 +51,6 @@ function Wrapper({ children }: { children: JSX.Element }) {
                 icon: "dollar",
               },
             ]}
-          />
-          <Fab
-            className="mb-16 lg:mb-0"
-            actions={[
-              {
-                label: "Income",
-                icon: "inboxPlus",
-                onClick: () => handleOpenModal(incomeModal),
-              },
-              {
-                label: "Expense",
-                icon: "inboxMinus",
-                onClick: () => handleOpenModal(expenseModal),
-              },
-              {
-                label: "Recurring",
-                icon: "repeat",
-                onClick: () => handleOpenModal(recurringModal),
-              },
-              {
-                label: "Budget",
-                icon: "dollar",
-                onClick: () => handleOpenModal(budgetModal),
-              },
-            ]}
-          />
-          <InputFormModal
-            id="incomeModal"
-            ref={incomeModal}
-            title="Add Income"
-            inputs={[
-              { label: "Date", type: "date" },
-              { label: "Name", type: "text" },
-              { label: "Amount", type: "number" },
-            ]}
-            action="Add"
-            onSubmit={createIncome}
-          />
-          <InputFormModal
-            id="expenseModal"
-            ref={expenseModal}
-            title="Add Expense"
-            inputs={[
-              { label: "Date", type: "date" },
-              { label: "Name", type: "text" },
-              {
-                label: "Budget",
-                type: "select",
-                value: budgets[0],
-                options: budgets,
-              },
-              { label: "Amount", type: "number" },
-            ]}
-            action="Add"
-          />
-          <InputFormModal
-            id="recurringModal"
-            ref={recurringModal}
-            title="Add Recurring"
-            inputs={[
-              { label: "Due", type: "date" },
-              {
-                label: "Frequency",
-                type: "select",
-                value: "Monthly",
-                options: [
-                  "Weekly",
-                  "Biweekly",
-                  "Monthly",
-                  "Bimonthly",
-                  "Quarterly",
-                  "Semiannually",
-                  "Annually",
-                ],
-              },
-              { label: "Name", type: "text" },
-              {
-                label: "Budget",
-                type: "select",
-                value: budgets[0],
-                options: budgets,
-              },
-
-              { label: "Amount", type: "number" },
-            ]}
-            action="Add"
-          />
-          <InputFormModal
-            id="budgetModal"
-            ref={budgetModal}
-            title="Add Budget"
-            inputs={[
-              { label: "Name", type: "text" },
-              { label: "Budget", type: "number" },
-            ]}
-            action="Add"
           />
           {children}
         </div>

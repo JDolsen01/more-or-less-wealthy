@@ -63,6 +63,7 @@ function InputFormModal({
     if (onSubmit) {
       onSubmit(formData); // Trigger parent callback with formData
     }
+    event.currentTarget.reset();
     ref.current?.close();
   };
 
