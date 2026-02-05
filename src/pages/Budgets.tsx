@@ -1,27 +1,37 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Table from "../components/Table";
 import InputFormModal, {
   handleEditOpenModal,
 } from "../components/InputFormModal";
-
-const budgets = [
-  { Name: "Marketing", Budget: 5000, Spent: 2500 },
-  { Name: "Research", Budget: 8000, Spent: 9000 },
-  { Name: "Development", Budget: 10000, Spent: 4000 },
-  { Name: "Sales", Budget: 7000, Spent: 3000 },
-];
+import {
+  getBudgets,
+  updateBudget,
+  deleteBudget,
+  type Budget,
+} from "../helpers/budget";
+import FabModal from "../components/FabModal";
 
 function Budgets() {
+  const [budgets, setBudgets] = useState<Array<Budget>>([]);
+  useEffect(() => {
+    getBudgets().then((data) =>
+      setBudgets(
+        data.map((item) => ({
+          id: item.id,
+          name: item.name,
+          budget: item.budget,
+        })),
+      ),
+    );
+  }, []);
+  const [currentBudget, setCurrentBudget] = useState<Record<string, any>>({});
+
   const editBudgetModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
   );
   const deleteBudgetModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
   );
-  const [currentBudget, setCurrentBudget] = useState<Record<
-    string,
-    any
-  > | null>(null);
 
   return (
     <div className="flex flex-col items-center justify-start px-4">
@@ -59,7 +69,7 @@ function Budgets() {
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
           <Table
-            data={budgets.filter((b) => b.Spent > b.Budget)}
+            data={budgets.filter((b) => b.budget > b.budget)}
             actions={[
               {
                 action: (row) =>
@@ -80,19 +90,42 @@ function Budgets() {
         ref={editBudgetModal}
         title="Edit Budget"
         inputs={[
-          { label: "Name", type: "text", value: currentBudget?.Name },
-          { label: "Budget", type: "number", value: currentBudget?.Budget },
-          { label: "Spent", type: "number", value: currentBudget?.Spent },
+          { label: "Id", type: "hidden", value: currentBudget?.id },
+          { label: "Name", type: "text", value: currentBudget?.name },
+          { label: "Budget", type: "number", value: currentBudget?.budget },
         ]}
         action="Save"
+        onSubmit={async (formData) => {
+          await updateBudget(formData);
+          setBudgets((prev) =>
+            prev.map((budget) =>
+              String(budget.id) === String(formData.get("id"))
+                ? {
+                    ...budget,
+                    name: formData.get("name") as string,
+                    budget: Number(formData.get("budget")),
+                  }
+                : budget,
+            ),
+          );
+        }}
       />
       <InputFormModal
         id="deleteBudgetModal"
         ref={deleteBudgetModal}
         title="Delete Budget?"
-        inputs={[{ label: "Id", type: "hidden", value: currentBudget?.Id }]}
+        inputs={[{ label: "Id", type: "hidden", value: currentBudget?.id }]}
         action="Delete"
+        onSubmit={async (formData) => {
+          await deleteBudget(formData);
+          setBudgets((prev) =>
+            prev.filter(
+              (budget) => String(budget.id) !== String(formData.get("id")),
+            ),
+          );
+        }}
       />
+      <FabModal setBudgets={setBudgets} />
     </div>
   );
 }

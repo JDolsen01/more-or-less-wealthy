@@ -4,7 +4,7 @@ import InputFormModal, { handleOpenModal } from "../components/InputFormModal";
 import { createIncome, getIncomes, type Income } from "../helpers/income";
 import type { Expense } from "../helpers/expense";
 import type { Recurring } from "../helpers/recurring";
-import type { Budget } from "../helpers/budget";
+import { createBudget, getBudgets, type Budget } from "../helpers/budget";
 
 interface FabModalProps {
   setIncomes?: React.Dispatch<React.SetStateAction<Income[]>>;
@@ -21,7 +21,7 @@ const budgets = [
   "Groceries",
 ];
 
-function FabModal({ setIncomes }: FabModalProps) {
+function FabModal({ setIncomes, setBudgets }: FabModalProps) {
   const incomeModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
   );
@@ -144,6 +144,18 @@ function FabModal({ setIncomes }: FabModalProps) {
           { label: "Budget", type: "number" },
         ]}
         action="Add"
+        onSubmit={async (formData) => {
+          await createBudget(formData);
+          if (setBudgets) {
+            const budgets = await getBudgets();
+            const mapped = budgets.map((item) => ({
+              id: item.id,
+              name: item.name,
+              budget: item.budget,
+            }));
+            setBudgets(mapped);
+          }
+        }}
       />
     </>
   );

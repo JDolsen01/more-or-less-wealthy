@@ -46,7 +46,6 @@ export async function updateIncome(formData: FormData) {
   const date = formData.get("date") as string;
   const name = formData.get("name") as string;
   const amount = Number(formData.get("amount"));
-  console.log({ id, date, name, amount });
   const { data, error } = await supabase
     .from("income")
     .update({
