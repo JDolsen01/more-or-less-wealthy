@@ -152,7 +152,21 @@ function Transactions() {
           { label: "Amount", type: "number", value: currentIncome?.amount },
         ]}
         action="Save"
-        onSubmit={updateIncome}
+        onSubmit={async (formData) => {
+          await updateIncome(formData);
+          setIncomes((prev) =>
+            prev.map((income) =>
+              String(income.id) === String(formData.get("id"))
+                ? {
+                    ...income,
+                    date: formData.get("date") as string,
+                    name: formData.get("name") as string,
+                    amount: Number(formData.get("amount")),
+                  }
+                : income,
+            ),
+          );
+        }}
       />
       <InputFormModal
         id="editExpenseModal"
@@ -178,7 +192,14 @@ function Transactions() {
         title="Delete Income?"
         inputs={[{ label: "Id", type: "hidden", value: currentIncome?.id }]}
         action="Delete"
-        onSubmit={deleteIncome}
+        onSubmit={async (formData) => {
+          await deleteIncome(formData);
+          setIncomes((prev) =>
+            prev.filter(
+              (income) => String(income.id) !== String(formData.get("id")),
+            ),
+          );
+        }}
       />
       <InputFormModal
         id="deleteExpenseModal"
