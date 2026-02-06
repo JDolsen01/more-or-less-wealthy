@@ -114,7 +114,10 @@ export async function completeRecurring(formData: FormData) {
 
 export async function deleteRecurring(formData: FormData) {
   const id = formData.get("id") as string;
-  const { data, error } = await supabase.from("expense").delete().eq("id", id);
+  const { data, error } = await supabase
+    .from("recurring")
+    .delete()
+    .eq("id", id);
   if (error) {
     throw error;
   }
