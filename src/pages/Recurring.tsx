@@ -94,7 +94,7 @@ function Recurring() {
         data.map((item) => ({
           id: item.id,
           name: item.name,
-          budget: item.budget,
+          amount: item.amount,
         })),
       ),
     );

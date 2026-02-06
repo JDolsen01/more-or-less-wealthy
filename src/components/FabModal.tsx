@@ -159,7 +159,7 @@ function FabModal({
         title="Add Budget"
         inputs={[
           { label: "Name", type: "text" },
-          { label: "Budget", type: "number" },
+          { label: "Amount", type: "number" },
         ]}
         action="Add"
         onSubmit={async (formData) => {
@@ -169,7 +169,7 @@ function FabModal({
             const mapped = budgets.map((item) => ({
               id: item.id,
               name: item.name,
-              budget: item.budget,
+              amount: item.amount,
             }));
             setBudgets(mapped);
           }

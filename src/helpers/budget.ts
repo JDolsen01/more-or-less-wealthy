@@ -3,12 +3,12 @@ import supabase from "./supabaseClient";
 export type Budget = {
   id: string;
   name: string;
-  budget: number;
+  amount: number;
 };
 
 export async function createBudget(formData: FormData) {
   const name = formData.get("name") as string;
-  const budget = formData.get("budget");
+  const amount = formData.get("amount");
   const user = await supabase.auth
     .getUser()
     .then(({ data: { user } }) => user?.id);
@@ -16,7 +16,7 @@ export async function createBudget(formData: FormData) {
     {
       user_id: user,
       name: name,
-      budget: budget,
+      amount: amount,
     },
   ]);
   if (error) {
@@ -41,12 +41,12 @@ export async function getBudgets() {
 export async function updateBudget(formData: FormData) {
   const id = formData.get("id") as string;
   const name = formData.get("name") as string;
-  const budget = formData.get("budget");
+  const amount = formData.get("amount");
   const { data, error } = await supabase
     .from("budget")
     .update({
       name: name,
-      budget: budget ? parseFloat(budget.toString()) : null,
+      amount: amount ? parseFloat(amount.toString()) : null,
     })
     .eq("id", id);
   if (error) {

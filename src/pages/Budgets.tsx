@@ -19,7 +19,7 @@ function Budgets() {
         data.map((item) => ({
           id: item.id,
           name: item.name,
-          budget: item.budget,
+          amount: item.amount,
         })),
       ),
     );
@@ -69,7 +69,7 @@ function Budgets() {
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
           <Table
-            data={budgets.filter((b) => b.budget > b.budget)}
+            data={budgets.filter((b) => b.amount > b.amount)}
             actions={[
               {
                 action: (row) =>
@@ -92,7 +92,7 @@ function Budgets() {
         inputs={[
           { label: "Id", type: "hidden", value: currentBudget?.id },
           { label: "Name", type: "text", value: currentBudget?.name },
-          { label: "Budget", type: "number", value: currentBudget?.budget },
+          { label: "Amount", type: "number", value: currentBudget?.amount },
         ]}
         action="Save"
         onSubmit={async (formData) => {

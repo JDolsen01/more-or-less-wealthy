@@ -39,7 +39,7 @@ function Transactions() {
         data.map((item) => ({
           id: item.id,
           name: item.name,
-          budget: item.budget,
+          amount: item.amount,
         })),
       ),
     );
@@ -199,7 +199,7 @@ function Transactions() {
                     date: formData.get("date"),
                     name: formData.get("name"),
                     budget: formData.get("budget"),
-                    amout: formData.get("amount"),
+                    amount: formData.get("amount"),
                   }
                 : expense,
             ),
