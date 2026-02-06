@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
-import Recurring from "./pages/Recurring";
+import Recurrings from "./pages/Recurring";
 import Budgets from "./pages/Budgets";
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
           path="/recurring"
           element={
             <Wrapper>
-              <Recurring />
+              <Recurrings />
             </Wrapper>
           }
         />

@@ -48,7 +48,7 @@ function advanceDateByFrequency(dateStr: string, frequency: string): string {
   return `${y}-${m}-${d}`;
 }
 
-function Recurring() {
+function Recurrings() {
   const editRecurringModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
   );
@@ -300,4 +300,4 @@ function Recurring() {
     </div>
   );
 }
-export default Recurring;
+export default Recurrings;
