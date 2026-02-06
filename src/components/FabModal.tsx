@@ -3,7 +3,11 @@ import Fab from "../components/Fab";
 import InputFormModal, { handleOpenModal } from "../components/InputFormModal";
 import { createIncome, getIncomes, type Income } from "../helpers/income";
 import { createExpense, getExpenses, type Expense } from "../helpers/expense";
-import type { Recurring } from "../helpers/recurring";
+import {
+  createRecurring,
+  getRecurrings,
+  type Recurring,
+} from "../helpers/recurring";
 import { createBudget, getBudgets, type Budget } from "../helpers/budget";
 
 interface FabModalProps {
@@ -17,6 +21,7 @@ interface FabModalProps {
 function FabModal({
   setIncomes,
   setExpenses,
+  setRecurrings,
   budgets,
   setBudgets,
 }: FabModalProps) {
@@ -152,6 +157,21 @@ function FabModal({
           { label: "Amount", type: "number" },
         ]}
         action="Add"
+        onSubmit={async (formData) => {
+          await createRecurring(formData);
+          if (setRecurrings) {
+            const recurrings = await getRecurrings();
+            const mapped = recurrings.map((item) => ({
+              id: item.id,
+              due: item.due,
+              frequency: item.frequency,
+              name: item.name,
+              budget: item.budget,
+              amount: item.amount,
+            }));
+            setRecurrings(mapped);
+          }
+        }}
       />
       <InputFormModal
         id="budgetModal"

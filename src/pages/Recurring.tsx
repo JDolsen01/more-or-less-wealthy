@@ -5,78 +5,50 @@ import InputFormModal, {
 import Table from "../components/Table";
 import FabModal from "../components/FabModal";
 import { getBudgets, type Budget } from "../helpers/budget";
-
-const reocurringExpenses = [
-  {
-    Due: "2026-01-01",
-    Frequency: "Semiannually",
-    Name: "Gym Membership",
-    Budget: "Subscription",
-    Amount: 50,
-  },
-  {
-    Due: "2026-01-05",
-    Frequency: "Monthly",
-    Name: "Netflix Subscription",
-    Budget: "Subscription",
-    Amount: 15,
-  },
-  {
-    Due: "2026-01-10",
-    Frequency: "Monthly",
-    Name: "Rent",
-    Budget: "Housing",
-    Amount: 1200,
-  },
-  {
-    Due: "2026-01-15",
-    Frequency: "Monthly",
-    Name: "Car Payment",
-    Budget: "Transportation",
-    Amount: 300,
-  },
-  {
-    Due: "2026-01-30",
-    Frequency: "Monthly",
-    Name: "Internet Bill",
-    Budget: "Utilities",
-    Amount: 60.23,
-  },
-];
+import {
+  completeRecurring,
+  deleteRecurring,
+  getRecurrings,
+  updateRecurring,
+  type Recurring,
+} from "../helpers/recurring";
 
 function advanceDateByFrequency(dateStr: string, frequency: string): string {
-  const date = new Date(dateStr);
-  switch (frequency) {
-    case "Weekly":
+  if (!dateStr || !frequency) return dateStr;
+  // Parse as local date to avoid timezone issues
+  const [year, month, day] = dateStr.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  switch (frequency.toLowerCase()) {
+    case "weekly":
       date.setDate(date.getDate() + 7);
       break;
-    case "Biweekly":
+    case "biweekly":
       date.setDate(date.getDate() + 14);
       break;
-    case "Monthly":
+    case "monthly":
       date.setMonth(date.getMonth() + 1);
       break;
-    case "Bimonthly":
+    case "bimonthly":
       date.setMonth(date.getMonth() + 2);
       break;
-    case "Quarterly":
+    case "quarterly":
       date.setMonth(date.getMonth() + 3);
       break;
-    case "Semiannually":
+    case "semiannually":
       date.setMonth(date.getMonth() + 6);
       break;
-    case "Annually":
+    case "annually":
       date.setFullYear(date.getFullYear() + 1);
       break;
   }
-  return date.toISOString().split("T")[0];
+  // Format as YYYY-MM-DD without timezone conversion
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 function Recurring() {
-  const pastDueExpenses = reocurringExpenses.filter(
-    (exp) => new Date(exp.Due) < new Date(),
-  );
-
   const editRecurringModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
   );
@@ -87,6 +59,21 @@ function Recurring() {
     null as unknown as HTMLDialogElement,
   );
 
+  const [recurrings, setRecurrings] = useState<Array<Recurring>>([]);
+  useEffect(() => {
+    getRecurrings().then((data) =>
+      setRecurrings(
+        data.map((item) => ({
+          id: item.id,
+          due: item.due,
+          frequency: item.frequency,
+          name: item.name,
+          budget: item.budget,
+          amount: item.amount,
+        })),
+      ),
+    );
+  }, []);
   const [budgets, setBudgets] = useState<Array<Budget>>([]);
   useEffect(() => {
     getBudgets().then((data) =>
@@ -103,14 +90,17 @@ function Recurring() {
     string,
     any
   > | null>(null);
+  const pastDueExpenses = recurrings.filter(
+    (exp) => new Date(exp.due) < new Date(),
+  );
 
   const nextDueDate = useMemo(
     () =>
       advanceDateByFrequency(
-        currentRecurring?.Due || new Date().toISOString().split("T")[0],
-        currentRecurring?.Frequency,
+        currentRecurring?.due || new Date().toISOString().split("T")[0],
+        currentRecurring?.frequency,
       ),
-    [currentRecurring?.Due, currentRecurring?.Frequency],
+    [currentRecurring?.due, currentRecurring?.frequency],
   );
 
   return (
@@ -126,7 +116,7 @@ function Recurring() {
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
           <Table
-            data={reocurringExpenses}
+            data={recurrings}
             actions={[
               {
                 action: (row) =>
@@ -204,12 +194,12 @@ function Recurring() {
         ref={editRecurringModal}
         title="Edit Recurring Expense"
         inputs={[
-          { label: "Id", type: "hidden", value: currentRecurring?.Id },
-          { label: "Due", type: "date", value: currentRecurring?.Due },
+          { label: "Id", type: "hidden", value: currentRecurring?.id },
+          { label: "Due", type: "date", value: currentRecurring?.due },
           {
             label: "Frequency",
             type: "select",
-            value: currentRecurring?.Frequency || "Monthly",
+            value: currentRecurring?.frequency || "Monthly",
             options: [
               { name: "Weekly", value: "weekly" },
               { name: "Biweekly", value: "biweekly" },
@@ -220,42 +210,93 @@ function Recurring() {
               { name: "Annually", value: "annually" },
             ],
           },
-          { label: "Name", type: "text", value: currentRecurring?.Name },
+          { label: "Name", type: "text", value: currentRecurring?.name },
           {
             label: "Budget",
             type: "select",
-            value: currentRecurring?.Budget || budgets[0]?.id,
+            value: currentRecurring?.budget || budgets[0]?.id,
             options: budgets.map((budget) => ({
               name: budget.name,
               value: budget.id,
             })),
           },
-          { label: "Amount", type: "number", value: currentRecurring?.Amount },
+          { label: "Amount", type: "number", value: currentRecurring?.amount },
         ]}
         action="Save"
+        onSubmit={async (formData) => {
+          await updateRecurring(formData);
+          setRecurrings((prev) =>
+            prev.map((recurr) =>
+              String(recurr.id) === String(formData.get("id"))
+                ? {
+                    ...recurr,
+                    due: formData.get("due"),
+                    frequency: formData.get("frequency"),
+                    name: formData.get("name"),
+                    budget: formData.get("budget"),
+                    amount: formData.get("amount"),
+                  }
+                : recurr,
+            ),
+          );
+        }}
       />
       <InputFormModal
         id="deleteRecurringModal"
         ref={deleteRecurringModal}
         title="Are you sure?"
-        inputs={[{ label: "Id", type: "hidden", value: currentRecurring?.Id }]}
+        inputs={[{ label: "Id", type: "hidden", value: currentRecurring?.id }]}
         action="Delete"
+        onSubmit={async (formData) => {
+          await deleteRecurring(formData);
+          setRecurrings((prev) =>
+            prev.filter(
+              (recurr) => String(recurr.id) !== String(formData.get("id")),
+            ),
+          );
+        }}
       />
       <InputFormModal
         id="completeRecurringModal"
         ref={completeRecurringModal}
         title="Complete Recurring Expense"
         inputs={[
-          { label: "Id", type: "hidden", value: currentRecurring?.Id },
+          { label: "Id", type: "hidden", value: currentRecurring?.id },
+          { label: "Due", type: "hidden", value: currentRecurring?.due },
+          { label: "nextdue", type: "hidden", value: nextDueDate },
           {
-            label: "Due",
+            label: "frequency",
             type: "hidden",
-            value: nextDueDate,
+            value: currentRecurring?.frequency,
           },
+          { label: "Name", type: "hidden", value: currentRecurring?.name },
+          { label: "Budget", type: "hidden", value: currentRecurring?.budget },
+          { label: "Amount", type: "hidden", value: currentRecurring?.amount },
         ]}
         action="Complete"
+        onSubmit={async (formData) => {
+          await completeRecurring(formData);
+          setRecurrings((prev) =>
+            prev.map((recurr) =>
+              String(recurr.id) === String(formData.get("id"))
+                ? {
+                    ...recurr,
+                    due: formData.get("nextdue"),
+                    frequency: formData.get("frequency"),
+                    name: formData.get("name"),
+                    budget: formData.get("budget"),
+                    amount: formData.get("amount"),
+                  }
+                : recurr,
+            ),
+          );
+        }}
       />
-      <FabModal budgets={budgets} setBudgets={setBudgets} />
+      <FabModal
+        setRecurrings={setRecurrings}
+        budgets={budgets}
+        setBudgets={setBudgets}
+      />
     </div>
   );
 }
