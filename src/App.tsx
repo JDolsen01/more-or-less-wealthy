@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import Wrapper from "./pages/Wrapper";
+import Protected from "./pages/Protected";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -19,33 +19,33 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <Wrapper>
+            <Protected>
               <Dashboard />
-            </Wrapper>
+            </Protected>
           }
         />
         <Route
           path="/transactions"
           element={
-            <Wrapper>
+            <Protected>
               <Transactions />
-            </Wrapper>
+            </Protected>
           }
         />
         <Route
           path="/recurring"
           element={
-            <Wrapper>
+            <Protected>
               <Recurrings />
-            </Wrapper>
+            </Protected>
           }
         />
         <Route
           path="/budgets"
           element={
-            <Wrapper>
+            <Protected>
               <Budgets />
-            </Wrapper>
+            </Protected>
           }
         />
         <Route path="*" element={<Navigate to="/" />} />

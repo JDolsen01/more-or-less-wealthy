@@ -3,7 +3,7 @@ import supabase from "../helpers/supabaseClient";
 import { Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
-function Wrapper({ children }: { children: JSX.Element }) {
+function Protected({ children }: { children: JSX.Element }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -60,4 +60,4 @@ function Wrapper({ children }: { children: JSX.Element }) {
   }
 }
 
-export default Wrapper;
+export default Protected;
