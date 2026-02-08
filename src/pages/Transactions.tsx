@@ -17,6 +17,7 @@ import {
   updateExpense,
   type Expense,
 } from "../helpers/expense";
+import BarChart from "../components/BarChart";
 
 function Transactions() {
   const [incomes, setIncomes] = useState<Array<Income>>([]);
@@ -75,7 +76,35 @@ function Transactions() {
   );
   return (
     <div className="flex flex-col items-center justify-start px-4">
-      <h1 className="text-2xl font-bold mt-4">Transactions</h1>
+      <div className="mt-4 mb-2 w-full max-w-4xl grid grid-cols-3 gap-4">
+        <div className="text-2xl font-bold my-auto col-span-2 md:col-span-1">
+          Oct. - Dec. 2026
+        </div>
+        <div className="tabs tabs-box w-full grid md:grid-none grid-cols-3 md:w-fit place-self-center col-span-3 order-first md:order-none md:col-span-1">
+          <input
+            type="radio"
+            name="time-frame"
+            className="tab"
+            aria-label="Month"
+            defaultChecked
+          />
+          <input
+            type="radio"
+            name="time-frame"
+            className="tab"
+            aria-label="Quarter"
+          />
+          <input
+            type="radio"
+            name="time-frame"
+            className="tab"
+            aria-label="Year"
+          />
+        </div>
+        <button className="btn btn-primary my-auto w-fit place-self-end">
+          Add
+        </button>
+      </div>
       <div className="tabs tabs-border w-full max-w-4xl">
         <input
           type="radio"
@@ -85,6 +114,25 @@ function Transactions() {
           defaultChecked
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
+          <BarChart
+            className="text-center"
+            data={[
+              {
+                key: "Income",
+                value: [
+                  23, 120, 30, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                  16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+                ],
+              },
+              {
+                key: "Expense",
+                value: [
+                  4, 10, 80, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+                  17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+                ],
+              },
+            ]}
+          />
           <Table
             data={[
               ...incomes,
@@ -99,6 +147,18 @@ function Transactions() {
           aria-label="Income"
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
+          <BarChart
+            className="col-span-2 order-first md:order-none md:col-span-3 text-center"
+            data={[
+              {
+                key: "Income",
+                value: [
+                  23, 120, 30, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                  16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+                ],
+              },
+            ]}
+          />
           <Table
             data={incomes}
             actions={[
@@ -119,9 +179,20 @@ function Transactions() {
           type="radio"
           name="my_tabs_2"
           className="tab"
-          aria-label="Expenses"
+          aria-label="Expense"
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
+          <BarChart
+            data={[
+              {
+                key: "Expense",
+                value: [
+                  4, 10, 80, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+                  17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+                ],
+              },
+            ]}
+          />
           <Table
             data={expenses}
             actions={[
@@ -143,6 +214,12 @@ function Transactions() {
           />
         </div>
       </div>
+      <span className="mt-2 w-full flex justify-center">
+        <div className="join grid grid-cols-2 w-fit">
+          <button className="join-item btn btn-outline">Previous</button>
+          <button className="join-item btn btn-outline">Next</button>
+        </div>
+      </span>
       <InputFormModal
         id="editIncomeModal"
         ref={editIncomeModal}

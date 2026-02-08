@@ -53,6 +53,7 @@ function Protected({ children }: { children: JSX.Element }) {
             ]}
           />
           {children}
+          <footer className="h-22"></footer>
         </div>
       );
     }
