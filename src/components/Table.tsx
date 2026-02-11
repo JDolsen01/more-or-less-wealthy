@@ -30,7 +30,7 @@ function Table({ title, data, actions }: TableProps) {
                   {col.charAt(0).toUpperCase() + col.slice(1)}
                 </th>
               ))}
-              {actions && actions.length > 0 && <th></th>}
+              {actions && actions.length > 0 && <th className="w-16"></th>}
             </tr>
           </thead>
           <tbody>
@@ -50,18 +50,32 @@ function Table({ title, data, actions }: TableProps) {
                 ))}
                 {actions && actions.length > 0 && (
                   <td
-                    className="whitespace-nowrap flex flex-row gap-2"
+                    className="whitespace-nowrap w-fit"
                     key={`action-${rowIndex}`}
                   >
-                    {actions.map((action) => (
-                      <button
-                        className="btn btn-xs btn-circle"
-                        key={action.type}
-                        onClick={() => action.action(row)}
+                    <div className="dropdown dropdown-end">
+                      <div
+                        tabIndex={0}
+                        role="button"
+                        className="btn btn-circle btn-sm"
                       >
-                        <Icon type={action.type} />
-                      </button>
-                    ))}
+                        <Icon type="dots" />
+                      </div>
+                      <ul
+                        tabIndex={-1}
+                        className="dropdown-content menu bg-base-100 rounded-box z-1 w-fit p-2 shadow-sm"
+                      >
+                        {actions.map((action) => (
+                          <li key={action.type}>
+                            <a onClick={() => action.action(row)}>
+                              <Icon type={action.type} />
+                              {action.type.charAt(0).toUpperCase() +
+                                action.type.slice(1)}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </td>
                 )}
               </tr>

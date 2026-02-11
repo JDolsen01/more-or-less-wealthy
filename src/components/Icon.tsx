@@ -9,7 +9,8 @@ type IconList =
   | "inboxMinus"
   | "edit"
   | "delete"
-  | "complete";
+  | "complete"
+  | "dots";
 
 interface IconProps {
   type: IconList;
@@ -100,6 +101,12 @@ const svgPaths: { [key in IconProps["type"]]: React.ReactElement } = {
       <path d="m5.45 4.11l-2.162 7.847A8 8 0 0 0 3 14.082V19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4.918a8 8 0 0 0-.288-2.125L18.55 4.11A2 2 0 0 0 16.76 3H7.24a2 2 0 0 0-1.79 1.11" />
       <path d="m10.3 8.742l1.034 1.182c.095.108.266.1.35-.017L13.784 7" />
     </g>
+  ),
+  dots: (
+    <path
+      fill="currentColor"
+      d="M12 11a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5A.75.75 0 0 1 12 11m4 0a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5A.75.75 0 0 1 16 11m-8 0a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5A.75.75 0 0 1 8 11"
+    />
   ),
 };
 
