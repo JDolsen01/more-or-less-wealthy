@@ -84,20 +84,20 @@ function Transactions() {
           <input
             type="radio"
             name="time-frame"
-            className="tab"
+            className="tab w-full text-center"
             aria-label="Month"
             defaultChecked
           />
           <input
             type="radio"
             name="time-frame"
-            className="tab"
+            className="tab w-full text-center"
             aria-label="Quarter"
           />
           <input
             type="radio"
             name="time-frame"
-            className="tab"
+            className="tab w-full text-center"
             aria-label="Year"
           />
         </div>
