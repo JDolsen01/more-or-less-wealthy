@@ -57,7 +57,7 @@ function Table({ title, data, actions }: TableProps) {
                       <div
                         tabIndex={0}
                         role="button"
-                        className="btn btn-circle btn-sm"
+                        className="btn btn-circle btn-xs"
                       >
                         <Icon type="dots" />
                       </div>
