@@ -63,7 +63,7 @@ function Table({ title, data, actions }: TableProps) {
                       </div>
                       <ul
                         tabIndex={-1}
-                        className="dropdown-content menu bg-base-100 rounded-box z-1 w-fit p-2 shadow-sm"
+                        className="dropdown-content menu bg-base-100 rounded-box z-1 w-fit p-2 mt-1 shadow-sm"
                       >
                         {actions.map((action) => (
                           <li key={action.type}>

@@ -1,28 +1,38 @@
 import { useRef, useState, useEffect } from "react";
 import InputFormModal, {
   handleEditOpenModal,
+  handleOpenModal,
 } from "../components/InputFormModal";
 import Table from "../components/Table";
 import {
+  createIncome,
   deleteIncome,
   getIncomes,
+  getIncomesByTerm,
   updateIncome,
   type Income,
+  type Terms,
 } from "../helpers/income";
-import FabModal from "../components/FabModal";
 import { type Budget, getBudgets } from "../helpers/budget";
 import {
+  createExpense,
   deleteExpense,
   getExpenses,
   updateExpense,
   type Expense,
 } from "../helpers/expense";
 import BarChart from "../components/BarChart";
+import Icon from "../components/Icon";
 
 function Transactions() {
+  const [currentIncome, setCurrentIncome] = useState<Record<string, any>>({});
+  const [currentExpense, setCurrentExpense] = useState<Record<string, any>>({});
+  const [currentTerm, setCurrentTerm] = useState<Terms>("month");
+  const [page, setPage] = useState<number>(0);
+
   const [incomes, setIncomes] = useState<Array<Income>>([]);
   useEffect(() => {
-    getIncomes().then((data) =>
+    getIncomesByTerm(currentTerm, page).then((data) =>
       setIncomes(
         data.map((item) => ({
           id: item.id,
@@ -32,7 +42,7 @@ function Transactions() {
         })),
       ),
     );
-  }, []);
+  }, [currentTerm, page]);
   const [budgets, setBudgets] = useState<Array<Budget>>([]);
   useEffect(() => {
     getBudgets().then((data) =>
@@ -59,9 +69,13 @@ function Transactions() {
       ),
     );
   }, []);
-  const [currentIncome, setCurrentIncome] = useState<Record<string, any>>({});
-  const [currentExpense, setCurrentExpense] = useState<Record<string, any>>({});
 
+  const addIncomeModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
+  const addExpenseModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
   const editIncomeModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
   );
@@ -86,6 +100,7 @@ function Transactions() {
             name="time-frame"
             className="tab w-full text-center"
             aria-label="Month"
+            onClick={() => setCurrentTerm("month")}
             defaultChecked
           />
           <input
@@ -93,17 +108,36 @@ function Transactions() {
             name="time-frame"
             className="tab w-full text-center"
             aria-label="Quarter"
+            onClick={() => setCurrentTerm("quarter")}
           />
           <input
             type="radio"
             name="time-frame"
             className="tab w-full text-center"
             aria-label="Year"
+            onClick={() => setCurrentTerm("year")}
           />
         </div>
-        <button className="btn btn-primary my-auto w-fit place-self-end">
-          Add
-        </button>
+        <div className="dropdown dropdown-end my-auto w-fit place-self-end">
+          <div tabIndex={0} role="button" className="btn btn-primary">
+            <Icon type="plus" /> Add
+          </div>
+          <ul
+            tabIndex={-1}
+            className="dropdown-content menu bg-base-100 rounded-box z-1 w-fit p-2 mt-1 shadow-sm"
+          >
+            <li>
+              <a onClick={() => handleOpenModal(addIncomeModal)}>
+                <Icon type="inboxPlus" /> Income
+              </a>
+            </li>
+            <li>
+              <a onClick={() => handleOpenModal(addExpenseModal)}>
+                <Icon type="inboxMinus" /> Expense
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
       <div className="tabs tabs-border w-full max-w-4xl">
         <input
@@ -216,10 +250,78 @@ function Transactions() {
       </div>
       <span className="mt-2 w-full flex justify-center">
         <div className="join grid grid-cols-2 w-fit">
-          <button className="join-item btn btn-outline">Previous</button>
-          <button className="join-item btn btn-outline">Next</button>
+          <button
+            className="join-item btn btn-outline"
+            onClick={() => setPage(page - 1)}
+          >
+            Previous
+          </button>
+          <button
+            className="join-item btn btn-outline"
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </button>
         </div>
       </span>
+      <InputFormModal
+        id="addIncomeModal"
+        ref={addIncomeModal}
+        title="Add Income"
+        inputs={[
+          { label: "Date", type: "date" },
+          { label: "Name", type: "text" },
+          { label: "Amount", type: "number" },
+        ]}
+        action="Add"
+        onSubmit={async (formData) => {
+          await createIncome(formData);
+          if (setIncomes) {
+            const incomes = await getIncomes();
+            const mapped = incomes.map((item) => ({
+              id: item.id,
+              date: item.date,
+              name: item.name,
+              amount: item.amount,
+            }));
+            setIncomes(mapped);
+          }
+        }}
+      />
+      <InputFormModal
+        id="addExpenseModal"
+        ref={addExpenseModal}
+        title="Add Expense"
+        inputs={[
+          { label: "Date", type: "date" },
+          { label: "Name", type: "text" },
+          {
+            label: "Budget",
+            type: "select",
+            value: budgets[0]?.id,
+            options: budgets.map((budget) => ({
+              name: budget.name,
+              value: budget.id,
+            })),
+          },
+          { label: "Amount", type: "number" },
+        ]}
+        onSubmit={async (formData) => {
+          await createExpense(formData);
+          if (setExpenses) {
+            const expenses = await getExpenses();
+            const mapped = expenses.map((item) => ({
+              id: item.id,
+              date: item.date,
+              name: item.name,
+              budget: item.budget,
+              amount: item.amount,
+            }));
+            setExpenses(mapped);
+          }
+        }}
+        action="Add"
+      />
       <InputFormModal
         id="editIncomeModal"
         ref={editIncomeModal}
@@ -313,12 +415,6 @@ function Transactions() {
             ),
           );
         }}
-      />
-      <FabModal
-        setIncomes={setIncomes}
-        setExpenses={setExpenses}
-        budgets={budgets}
-        setBudgets={setBudgets}
       />
     </div>
   );
