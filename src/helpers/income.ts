@@ -52,7 +52,6 @@ export async function getIncomesByTerm(term: Terms, page: number) {
     switch (term) {
       case "month": {
         const [year, month] = date.split("-").map(Number);
-        console.log("Calculating month term with", { year, month, page });
         return [
           new Date(year, month - 1 + page, 1),
           new Date(year, month + page, 0), // last day of the month
@@ -77,8 +76,12 @@ export async function getIncomesByTerm(term: Terms, page: number) {
       }
     }
   })();
-  console.log("startDate", startDate);
-  console.log("endDate", endDate);
+  console.log("Getting incomes by term with", {
+    term,
+    page,
+    startDate,
+    endDate,
+  });
   const { data, error } = await supabase
     .from("income")
     .select("*")
@@ -88,7 +91,6 @@ export async function getIncomesByTerm(term: Terms, page: number) {
   if (error) {
     throw error;
   }
-  console.log("Getting incomes by term");
   return data;
 }
 

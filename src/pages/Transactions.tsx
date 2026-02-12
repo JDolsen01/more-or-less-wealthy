@@ -18,6 +18,7 @@ import {
   createExpense,
   deleteExpense,
   getExpenses,
+  getExpensesByTerm,
   updateExpense,
   type Expense,
 } from "../helpers/expense";
@@ -57,7 +58,7 @@ function Transactions() {
   }, []);
   const [expenses, setExpenses] = useState<Array<Expense>>([]);
   useEffect(() => {
-    getExpenses().then((data) =>
+    getExpensesByTerm(currentTerm, page).then((data) =>
       setExpenses(
         data.map((item) => ({
           id: item.id,
@@ -68,7 +69,7 @@ function Transactions() {
         })),
       ),
     );
-  }, []);
+  }, [currentTerm, page]);
 
   const addIncomeModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
@@ -100,7 +101,10 @@ function Transactions() {
             name="time-frame"
             className="tab w-full text-center"
             aria-label="Month"
-            onClick={() => setCurrentTerm("month")}
+            onClick={() => {
+              setCurrentTerm("month");
+              setPage(0);
+            }}
             defaultChecked
           />
           <input
@@ -108,14 +112,20 @@ function Transactions() {
             name="time-frame"
             className="tab w-full text-center"
             aria-label="Quarter"
-            onClick={() => setCurrentTerm("quarter")}
+            onClick={() => {
+              setCurrentTerm("quarter");
+              setPage(0);
+            }}
           />
           <input
             type="radio"
             name="time-frame"
             className="tab w-full text-center"
             aria-label="Year"
-            onClick={() => setCurrentTerm("year")}
+            onClick={() => {
+              setCurrentTerm("year");
+              setPage(0);
+            }}
           />
         </div>
         <div className="dropdown dropdown-end my-auto w-fit place-self-end">
