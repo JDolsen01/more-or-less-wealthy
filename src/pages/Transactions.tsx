@@ -11,7 +11,6 @@ import {
   getIncomesByTerm,
   updateIncome,
   type Income,
-  type Terms,
 } from "../helpers/income";
 import { type Budget, getBudgets } from "../helpers/budget";
 import {
@@ -24,6 +23,7 @@ import {
 } from "../helpers/expense";
 import BarChart from "../components/BarChart";
 import Icon from "../components/Icon";
+import type { Terms } from "../helpers/terms";
 
 function Transactions() {
   const [currentIncome, setCurrentIncome] = useState<Record<string, any>>({});
@@ -169,7 +169,7 @@ function Transactions() {
                 ],
               },
               {
-                key: "Expense",
+                key: "Expenses",
                 value: [
                   4, 10, 80, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
                   17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
@@ -223,13 +223,13 @@ function Transactions() {
           type="radio"
           name="my_tabs_2"
           className="tab"
-          aria-label="Expense"
+          aria-label="Expenses"
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
           <BarChart
             data={[
               {
-                key: "Expense",
+                key: "Expenses",
                 value: [
                   4, 10, 80, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
                   17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
