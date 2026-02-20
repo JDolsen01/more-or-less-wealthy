@@ -23,13 +23,18 @@ import {
 } from "../helpers/expense";
 import BarChart from "../components/BarChart";
 import Icon from "../components/Icon";
-import type { Terms } from "../helpers/terms";
+import { getTermLabel, type Terms } from "../helpers/terms";
 
 function Transactions() {
   const [currentIncome, setCurrentIncome] = useState<Record<string, any>>({});
   const [currentExpense, setCurrentExpense] = useState<Record<string, any>>({});
   const [currentTerm, setCurrentTerm] = useState<Terms>("month");
   const [page, setPage] = useState<number>(0);
+
+  const [termLabel, setTermLabel] = useState<string>("");
+  useEffect(() => {
+    setTermLabel(getTermLabel(currentTerm, page));
+  }, [currentTerm, page]);
 
   const [incomes, setIncomes] = useState<Array<Income>>([]);
   useEffect(() => {
@@ -93,7 +98,7 @@ function Transactions() {
     <div className="flex flex-col items-center justify-start px-4">
       <div className="mt-4 mb-2 w-full max-w-4xl grid grid-cols-3 gap-4">
         <div className="text-2xl font-bold my-auto col-span-2 md:col-span-1">
-          Oct. - Dec. 2026
+          {termLabel}
         </div>
         <div className="tabs tabs-box w-full grid md:grid-none grid-cols-3 md:w-fit place-self-center col-span-3 order-first md:order-none md:col-span-1">
           <input

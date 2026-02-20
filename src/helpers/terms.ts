@@ -35,3 +35,28 @@ export function getStartAndEndDates(term: Terms, page: number) {
   })();
   return [startDate, endDate];
 }
+
+export function getTermLabel(term: Terms, page: number) {
+  const [startDate, endDate] = getStartAndEndDates(term, page);
+  const start = startDate.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
+  const end = endDate.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
+  const label = (() => {
+    switch (term) {
+      case "month":
+        return `${start}`;
+      case "quarter":
+        return `Q${Math.floor(endDate.getMonth() / 3) + 1} ${startDate.getFullYear()}`;
+      case "year":
+        return `${startDate.getFullYear()}`;
+      default:
+        return `${start} - ${end}`;
+    }
+  })();
+  return label;
+}
