@@ -28,27 +28,13 @@ import { getTermLabel, type Terms } from "../helpers/terms";
 function Transactions() {
   const [currentIncome, setCurrentIncome] = useState<Record<string, any>>({});
   const [currentExpense, setCurrentExpense] = useState<Record<string, any>>({});
+  const [incomes, setIncomes] = useState<Array<Income>>([]);
+  const [expenses, setExpenses] = useState<Array<Expense>>([]);
+
+  const [termLabel, setTermLabel] = useState<string>("");
   const [currentTerm, setCurrentTerm] = useState<Terms>("month");
   const [page, setPage] = useState<number>(0);
 
-  const [termLabel, setTermLabel] = useState<string>("");
-  useEffect(() => {
-    setTermLabel(getTermLabel(currentTerm, page));
-  }, [currentTerm, page]);
-
-  const [incomes, setIncomes] = useState<Array<Income>>([]);
-  useEffect(() => {
-    getIncomesByTerm(currentTerm, page).then((data) =>
-      setIncomes(
-        data.map((item) => ({
-          id: item.id,
-          date: item.date,
-          name: item.name,
-          amount: item.amount,
-        })),
-      ),
-    );
-  }, [currentTerm, page]);
   const [budgets, setBudgets] = useState<Array<Budget>>([]);
   useEffect(() => {
     getBudgets().then((data) =>
@@ -61,8 +47,19 @@ function Transactions() {
       ),
     );
   }, []);
-  const [expenses, setExpenses] = useState<Array<Expense>>([]);
+
   useEffect(() => {
+    setTermLabel(getTermLabel(currentTerm, page));
+    getIncomesByTerm(currentTerm, page).then((data) =>
+      setIncomes(
+        data.map((item) => ({
+          id: item.id,
+          date: item.date,
+          name: item.name,
+          amount: item.amount,
+        })),
+      ),
+    );
     getExpensesByTerm(currentTerm, page).then((data) =>
       setExpenses(
         data.map((item) => ({
