@@ -173,7 +173,7 @@ function Transactions() {
           </ul>
         </div>
       </div>
-      <div className="tabs tabs-border w-full max-w-4xl">
+      <div className="tabs tabs-border w-full max-w-4xl mt-2">
         <input
           type="radio"
           name="my_tabs_2"
