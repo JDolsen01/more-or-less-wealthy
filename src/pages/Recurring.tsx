@@ -1,17 +1,19 @@
 import { useRef, useState, useMemo, useEffect } from "react";
 import InputFormModal, {
   handleEditOpenModal,
+  handleOpenModal,
 } from "../components/InputFormModal";
 import Table from "../components/Table";
-import FabModal from "../components/FabModal";
 import { getBudgets, type Budget } from "../helpers/budget";
 import {
   completeRecurring,
+  createRecurring,
   deleteRecurring,
   getRecurrings,
   updateRecurring,
   type Recurring,
 } from "../helpers/recurring";
+import Icon from "../components/Icon";
 
 function advanceDateByFrequency(dateStr: string, frequency: string): string {
   if (!dateStr || !frequency) return dateStr;
@@ -49,6 +51,9 @@ function advanceDateByFrequency(dateStr: string, frequency: string): string {
 }
 
 function Recurrings() {
+  const addRecurringModal = useRef<HTMLDialogElement>(
+    null as unknown as HTMLDialogElement,
+  );
   const editRecurringModal = useRef<HTMLDialogElement>(
     null as unknown as HTMLDialogElement,
   );
@@ -105,7 +110,15 @@ function Recurrings() {
 
   return (
     <div className="flex flex-col items-center justify-start px-4">
-      <h1 className="text-2xl font-bold mt-4">Recurring</h1>
+      <div className="mt-4 mb-2 w-full h-12 max-w-4xl flex items-center justify-between">
+        <h1 className="text-2xl font-bold my-auto">Recurring</h1>
+        <button
+          className="btn btn-primary"
+          onClick={() => handleOpenModal(addRecurringModal)}
+        >
+          <Icon type="plus" /> Add
+        </button>
+      </div>
       <div className="tabs tabs-border w-full max-w-4xl">
         <input
           type="radio"
@@ -189,6 +202,56 @@ function Recurrings() {
           />
         </div>
       </div>
+      <InputFormModal
+        id="addRecurringModal"
+        ref={addRecurringModal}
+        title="Add Recurring"
+        inputs={[
+          { label: "Due", type: "date" },
+          {
+            label: "Frequency",
+            type: "select",
+            value: "Monthly",
+            options: [
+              { name: "Weekly", value: "weekly" },
+              { name: "Biweekly", value: "biweekly" },
+              { name: "Monthly", value: "monthly" },
+              { name: "Bimonthly", value: "bimonthly" },
+              { name: "Quarterly", value: "quarterly" },
+              { name: "Semiannually", value: "semiannually" },
+              { name: "Annually", value: "annually" },
+            ],
+          },
+          { label: "Name", type: "text" },
+          {
+            label: "Budget",
+            type: "select",
+            value: budgets[0]?.id,
+            options: budgets.map((budget) => ({
+              name: budget.name,
+              value: budget.id,
+            })),
+          },
+
+          { label: "Amount", type: "number" },
+        ]}
+        action="Add"
+        onSubmit={async (formData) => {
+          await createRecurring(formData);
+          if (setRecurrings) {
+            const recurrings = await getRecurrings();
+            const mapped = recurrings.map((item) => ({
+              id: item.id,
+              due: item.due,
+              frequency: item.frequency,
+              name: item.name,
+              budget: item.budget,
+              amount: item.amount,
+            }));
+            setRecurrings(mapped);
+          }
+        }}
+      />
       <InputFormModal
         id="editRecurringModal"
         ref={editRecurringModal}
@@ -291,11 +354,6 @@ function Recurrings() {
             ),
           );
         }}
-      />
-      <FabModal
-        setRecurrings={setRecurrings}
-        budgets={budgets}
-        setBudgets={setBudgets}
       />
     </div>
   );
