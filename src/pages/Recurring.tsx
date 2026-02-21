@@ -110,8 +110,9 @@ function Recurrings() {
 
   return (
     <div className="flex flex-col items-center justify-start px-4">
-      <div className="mt-4 mb-2 w-full h-12 max-w-4xl flex items-center justify-between">
+      <div className="mt-4 w-full max-w-4xl flex items-center justify-between">
         <h1 className="text-2xl font-bold my-auto">Recurring</h1>
+        <div className="h-12 hidden md:block" />
         <button
           className="btn btn-primary"
           onClick={() => handleOpenModal(addRecurringModal)}

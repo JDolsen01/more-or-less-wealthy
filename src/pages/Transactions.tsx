@@ -115,11 +115,11 @@ function Transactions() {
   );
   return (
     <div className="flex flex-col items-center justify-start px-4">
-      <div className="mt-4 mb-2 w-full max-w-4xl grid grid-cols-3 gap-4">
+      <div className="mt-4 w-full max-w-4xl grid grid-cols-3 gap-4">
         <h1 className="text-2xl font-bold my-auto col-span-2 md:col-span-1">
           {termLabel}
         </h1>
-        <div className="tabs tabs-box w-full grid md:grid-none grid-cols-3 md:w-fit place-self-center col-span-3 order-first md:order-none md:col-span-1">
+        <div className="tabs tabs-box w-full grid md:grid-none grid-cols-3 md:w-fit place-self-center col-span-3 order-last md:order-none md:col-span-1">
           <input
             type="radio"
             name="time-frame"
