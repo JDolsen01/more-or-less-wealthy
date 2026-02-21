@@ -1,5 +1,39 @@
 export type Terms = "month" | "quarter" | "year";
 
+function getNumberOfDaysInTerm(term: Terms, page: number) {
+  const [startDate, endDate] = getStartAndEndDates(term, page);
+  const timeDiff = endDate.getTime() - startDate.getTime();
+  return Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // +1 to include both start and end dates
+}
+
+function getNumberOfMonthsInTerm(term: Terms, page: number) {
+  const [startDate, endDate] = getStartAndEndDates(term, page);
+  return (
+    endDate.getMonth() -
+    startDate.getMonth() +
+    1 + // +1 to include both start and end months
+    (endDate.getFullYear() - startDate.getFullYear()) * 12
+  );
+}
+
+function getDataPointsInTerm(term: Terms, page: number) {
+  switch (term) {
+    case "month":
+      const datapointsM: number[] = new Array(
+        getNumberOfDaysInTerm(term, page),
+      ).fill(0);
+      return datapointsM;
+    case "quarter":
+    case "year":
+      const datapointsQY: number[] = new Array(
+        getNumberOfMonthsInTerm(term, page),
+      ).fill(0);
+      return datapointsQY;
+    default:
+      return [];
+  }
+}
+
 export function getStartAndEndDates(term: Terms, page: number) {
   const today = new Date();
   const date = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
@@ -34,6 +68,30 @@ export function getStartAndEndDates(term: Terms, page: number) {
     }
   })();
   return [startDate, endDate];
+}
+
+export function setTermDatapoints(
+  term: Terms,
+  page: number,
+  data: { date: string; amount: number }[],
+) {
+  const datapoints = getDataPointsInTerm(term, page);
+  data.forEach(({ date, amount }) => {
+    const d = new Date(date);
+    const index = (() => {
+      switch (term) {
+        case "month":
+          return d.getDate(); // -1 to convert to 0-based index
+        case "quarter":
+        case "year":
+          return d.getMonth(); // month is already 0-based
+        default:
+          return 0;
+      }
+    })();
+    datapoints[index] += amount;
+  });
+  return datapoints;
 }
 
 export function getTermLabel(term: Terms, page: number) {

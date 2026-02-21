@@ -56,7 +56,7 @@ function BarChart({ className, data }: BarChartProps) {
                     className={`rounded-t-xs transition-all ${COLOR_CLASSES[dataIndex % COLOR_CLASSES.length]}`}
                     style={{
                       height: `${height}%`,
-                      minHeight: val > 0 ? "4px" : "0px",
+                      minHeight: val > 0 ? "4px" : "4px",
                     }}
                     title={`${dataPoint.key}: ${val}`}
                   />

@@ -23,7 +23,7 @@ import {
 } from "../helpers/expense";
 import BarChart from "../components/BarChart";
 import Icon from "../components/Icon";
-import { getTermLabel, type Terms } from "../helpers/terms";
+import { getTermLabel, setTermDatapoints, type Terms } from "../helpers/terms";
 
 function Transactions() {
   const [currentIncome, setCurrentIncome] = useState<Record<string, any>>({});
@@ -34,6 +34,28 @@ function Transactions() {
   const [termLabel, setTermLabel] = useState<string>("");
   const [currentTerm, setCurrentTerm] = useState<Terms>("month");
   const [page, setPage] = useState<number>(0);
+
+  const [incomeDatapoints, setIncomeDatapoints] = useState<Array<number>>([]);
+  const [expenseDatapoints, setExpenseDatapoints] = useState<Array<number>>([]);
+  useEffect(() => {
+    setIncomeDatapoints(
+      setTermDatapoints(
+        currentTerm,
+        page,
+        incomes.map((income) => ({ date: income.date, amount: income.amount })),
+      ),
+    );
+    setExpenseDatapoints(
+      setTermDatapoints(
+        currentTerm,
+        page,
+        expenses.map((expense) => ({
+          date: expense.date,
+          amount: expense.amount,
+        })),
+      ),
+    );
+  }, [incomes, expenses, currentTerm, page]);
 
   const [budgets, setBudgets] = useState<Array<Budget>>([]);
   useEffect(() => {
@@ -165,17 +187,11 @@ function Transactions() {
             data={[
               {
                 key: "Income",
-                value: [
-                  23, 120, 30, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-                  16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-                ],
+                value: incomeDatapoints,
               },
               {
                 key: "Expenses",
-                value: [
-                  4, 10, 80, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-                  17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-                ],
+                value: expenseDatapoints,
               },
             ]}
           />
@@ -198,10 +214,7 @@ function Transactions() {
             data={[
               {
                 key: "Income",
-                value: [
-                  23, 120, 30, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-                  16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-                ],
+                value: incomeDatapoints,
               },
             ]}
           />
@@ -232,10 +245,7 @@ function Transactions() {
             data={[
               {
                 key: "Expenses",
-                value: [
-                  4, 10, 80, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-                  17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-                ],
+                value: expenseDatapoints,
               },
             ]}
           />
