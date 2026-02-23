@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import Table from "../components/Table";
 import InputFormModal, {
   handleEditOpenModal,
   handleOpenModal,
