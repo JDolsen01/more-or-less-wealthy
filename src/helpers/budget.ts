@@ -1,4 +1,5 @@
 import supabase from "./supabaseClient";
+import { getStartAndEndDates, type Terms } from "./terms";
 
 export type Budget = {
   id: string;
@@ -64,4 +65,30 @@ export async function deleteBudget(formData: FormData) {
   }
   console.log("Deleting income");
   return data;
+}
+
+export async function getBudgetTotalsByTerm(term: Terms, page: number) {
+  const [startDate, endDate] = getStartAndEndDates(term, page);
+  console.log("Getting budget totals by term with", {
+    term,
+    page,
+    startDate,
+    endDate,
+  });
+  const { data, error } = await supabase
+    .from("expense")
+    .select("budget, amount")
+    .gte("date", startDate.toISOString().split("T")[0])
+    .lte("date", endDate.toISOString().split("T")[0]);
+  if (error) {
+    throw error;
+  }
+  const totals: Record<string, number> = {};
+  data.forEach((item) => {
+    if (item.budget) {
+      totals[item.budget] = (totals[item.budget] || 0) + (item.amount || 0);
+    }
+  });
+  console.log("Budget totals by term:", totals);
+  return totals;
 }
