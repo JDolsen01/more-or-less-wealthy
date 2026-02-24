@@ -62,6 +62,19 @@ export async function getIncomesByTerm(term: Terms, page: number) {
   return data;
 }
 
+export async function getMostRecentIncome(limit: number) {
+  const { data, error } = await supabase
+    .from("income")
+    .select("date, name, amount", { count: "exact" })
+    .order("date", { ascending: false })
+    .limit(limit);
+  if (error) {
+    throw error;
+  }
+  console.log("Getting most recent income");
+  return data;
+}
+
 export async function updateIncome(formData: FormData) {
   const id = formData.get("id") as string;
   const date = formData.get("date") as string;

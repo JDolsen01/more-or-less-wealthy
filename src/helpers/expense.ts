@@ -65,6 +65,18 @@ export async function getExpensesByTerm(term: Terms, page: number) {
   return data;
 }
 
+export async function getMostRecentExpenses(limit: number) {
+  const { data, error } = await supabase
+    .from("expense")
+    .select("date, name, amount", { count: "exact" })
+    .order("date", { ascending: false })
+    .limit(limit);
+  if (error) {
+    throw error;
+  }
+  return data;
+}
+
 export async function updateExpense(formData: FormData) {
   const id = formData.get("id") as string;
   const date = formData.get("date") as string;
