@@ -43,39 +43,42 @@ function Dashboard() {
         <div className="h-12 hidden md:block" />
       </div>
       <div className="max-w-4xl w-full">
-        <div className="card shadow flex flex-row flex-wrap justify-between gap-3 w-full p-4 mt-2">
-          <div className="flex flex-col">
-            <div className="stat-title">Total Income</div>
-            <div className="flex items-center gap-2">
-              <Icon
-                type="inboxPlus"
-                className="text-primary inline-block h-8 w-8 stroke-current"
-              />
-              <div className="stat-value text-primary">
-                ${formatCurrency(incomeTotal)}
+        <div className="card shadow flex flex-col p-4 mt-2">
+          <h2 className="text-lg font-bold">Totals</h2>
+          <div className="flex flex-row justify-between flex-wrap gap-3 w-full mt-1">
+            <div className="flex flex-col">
+              <div className="stat-title">Total Income</div>
+              <div className="flex items-center gap-2">
+                <Icon
+                  type="inboxPlus"
+                  className="text-primary inline-block h-8 w-8 stroke-current"
+                />
+                <div className="stat-value text-primary">
+                  ${formatCurrency(incomeTotal)}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col">
-            <div className="stat-title">Total Expenses</div>
-            <div className="flex items-center gap-2">
-              <Icon
-                type="inboxMinus"
-                className="text-secondary inline-block h-8 w-8 stroke-current"
-              />
-              <div className="stat-value text-secondary">
-                ${formatCurrency(expenseTotal)}
+            <div className="flex flex-col">
+              <div className="stat-title">Total Expenses</div>
+              <div className="flex items-center gap-2">
+                <Icon
+                  type="inboxMinus"
+                  className="text-secondary inline-block h-8 w-8 stroke-current"
+                />
+                <div className="stat-value text-secondary">
+                  ${formatCurrency(expenseTotal)}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col">
-            <div className="stat-title">Total Balance</div>
-            <div className="flex items-center gap-2">
-              <Icon
-                type="inbox"
-                className="inline-block h-8 w-8 stroke-current"
-              />
-              <div className="stat-value">${balance}</div>
+            <div className="flex flex-col">
+              <div className="stat-title">Total Balance</div>
+              <div className="flex items-center gap-2">
+                <Icon
+                  type="inbox"
+                  className="inline-block h-8 w-8 stroke-current"
+                />
+                <div className="stat-value">${balance}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -89,6 +92,9 @@ function Dashboard() {
           <h2 className="text-lg font-bold">Recent Expenses</h2>
           <Table data={recentExpenses} />
         </div>
+      </div>
+      <div className="max-w-4xl w-full mt-4 card shadow">
+        <h2 className="text-lg font-bold p-4">Monthly Budget Overview</h2>
       </div>
     </div>
   );

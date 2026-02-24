@@ -22,9 +22,9 @@ const svgPaths: { [key in IconProps["type"]]: React.ReactElement } = {
     <g
       fill="none"
       stroke="currentColor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
     >
       <path d="M21 21H9.4c-2.24 0-3.36 0-4.216-.436a4 4 0 0 1-1.748-1.748C3 17.96 3 16.84 3 14.6V3" />
       <path d="M14.5 7v9a1.5 1.5 0 0 0 1.5 1.5h1a1.5 1.5 0 0 0 1.5-1.5V7A1.5 1.5 0 0 0 17 5.5h-1A1.5 1.5 0 0 0 14.5 7m-7 4v5A1.5 1.5 0 0 0 9 17.5h1a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 10 9.5H9A1.5 1.5 0 0 0 7.5 11" />
@@ -40,9 +40,9 @@ const svgPaths: { [key in IconProps["type"]]: React.ReactElement } = {
     <g
       fill="none"
       stroke="currentColor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
     >
       <path d="m17 3l4 3l-4 3" />
       <path d="M3 12v-2a4 4 0 0 1 4-4h14M7 21l-4-3l4-3" />
@@ -53,9 +53,9 @@ const svgPaths: { [key in IconProps["type"]]: React.ReactElement } = {
     <path
       fill="none"
       stroke="currentColor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
       d="M17 5h-5m0 0H9.5a3.5 3.5 0 1 0 0 7H12m0-7V3m0 2v7m0 0h2.5a3.5 3.5 0 1 1 0 7H12m0-7v7m0 0H6m6 0v2"
     />
   ),
@@ -69,9 +69,9 @@ const svgPaths: { [key in IconProps["type"]]: React.ReactElement } = {
     <g
       fill="none"
       stroke="currentColor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
     >
       <path d="M3.25 13h3.68a2 2 0 0 1 1.664.89l.812 1.22a2 2 0 0 0 1.664.89h1.86a2 2 0 0 0 1.664-.89l.812-1.22A2 2 0 0 1 17.07 13h3.68" />
       <path d="m5.45 4.11l-2.162 7.847A8 8 0 0 0 3 14.082V19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4.918a8 8 0 0 0-.288-2.125L18.55 4.11A2 2 0 0 0 16.76 3H7.24a2 2 0 0 0-1.79 1.11" />
