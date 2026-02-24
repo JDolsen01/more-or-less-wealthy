@@ -96,3 +96,15 @@ export async function deleteExpense(formData: FormData) {
   console.log("Deleting expense");
   return data;
 }
+
+export async function getTotalExpenses() {
+  const { data, error } = await supabase
+    .from("expense")
+    .select("amount", { count: "exact" });
+  if (error) {
+    throw error;
+  }
+  const total = data.reduce((sum, expense) => sum + expense.amount, 0);
+  console.log("Getting total expenses");
+  return total;
+}

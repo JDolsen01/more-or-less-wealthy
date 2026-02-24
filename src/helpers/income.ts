@@ -91,3 +91,16 @@ export async function deleteIncome(formData: FormData) {
   console.log("Deleting income");
   return data;
 }
+
+export async function getTotalIncome() {
+  const { data, error } = await supabase
+    .from("income")
+    .select("amount", { count: "exact" });
+  if (error) {
+    throw error;
+  }
+  const total =
+    data?.reduce((sum, income) => sum + (income.amount || 0), 0) || 0;
+  console.log("Getting total income");
+  return total;
+}
