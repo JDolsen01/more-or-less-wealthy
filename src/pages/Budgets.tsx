@@ -200,7 +200,10 @@ function Budgets() {
                       </p>
                       <p className="text-xs text-gray-500">
                         Remaining: $
-                        {(budget.amount - (spent[budget.id] || 0)).toFixed(2)}
+                        {(
+                          budget.amount * termFactor -
+                          (spent[budget.id] || 0)
+                        ).toFixed(2)}
                       </p>
                     </div>
                   </div>
