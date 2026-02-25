@@ -4,6 +4,11 @@ import { getMostRecentExpenses, getTotalExpenses } from "../helpers/expense";
 import { getMostRecentIncome, getTotalIncome } from "../helpers/income";
 import { formatCurrency } from "../helpers/format";
 import Table from "../components/Table";
+import {
+  getBudgets,
+  getBudgetTotalsByTerm,
+  type Budget,
+} from "../helpers/budget";
 
 type Transactions = {
   date: string;
@@ -17,6 +22,8 @@ function Dashboard() {
   const [balance, setBalance] = useState(0);
   const [recentIncome, setRecentIncome] = useState<Transactions>([]);
   const [recentExpenses, setRecentExpenses] = useState<Transactions>([]);
+  const [budgets, setBudgets] = useState<Array<Budget>>([]);
+  const [spent, setSpent] = useState<Record<string, number>>({});
 
   useEffect(() => {
     getTotalExpenses().then((total) => {
@@ -30,6 +37,12 @@ function Dashboard() {
     });
     getMostRecentIncome(5).then((income) => {
       setRecentIncome(income);
+    });
+    getBudgets().then((budgets) => {
+      setBudgets(budgets);
+    });
+    getBudgetTotalsByTerm("month", 0).then((totals) => {
+      setSpent(totals);
     });
   }, []);
   useEffect(() => {
@@ -94,7 +107,35 @@ function Dashboard() {
         </div>
       </div>
       <div className="max-w-4xl w-full mt-4 card shadow">
-        <h2 className="text-lg font-bold p-4">Monthly Budget Overview</h2>
+        <h2 className="text-lg font-bold p-4">Budget Overview</h2>
+        <div className="px-4 pb-4 grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+          {budgets.map((budget) => (
+            <div key={budget.id} className="w-full flex flex-col">
+              <div className="w-full flex justify-between">
+                <span>{budget.name}</span>
+                <span className="text-xs text-gray-500 self-end">
+                  Total: ${budget.amount.toFixed(2)}
+                </span>
+              </div>
+              <div className="grow">
+                <progress
+                  className="progress progress-primary w-full"
+                  value={spent[budget.id] || 0}
+                  max={budget.amount}
+                ></progress>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">
+                    Spent: ${spent[budget.id]?.toFixed(2) || 0}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    Remaining: $
+                    {(budget.amount - (spent[budget.id] || 0)).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
