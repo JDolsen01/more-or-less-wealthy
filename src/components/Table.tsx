@@ -4,15 +4,16 @@ type ActionType = "edit" | "delete" | "complete";
 
 interface TableProps {
   title?: string;
+  header: string[];
   data: Array<Record<string, any>>;
+  formattedValues?: Record<string, (value: any) => string>; //for formatting specific values in the table
   actions?: {
     action: (row: Record<string, any>) => void;
     type: ActionType;
   }[];
 }
 
-function Table({ title, data, actions }: TableProps) {
-  const columns = Object.keys(data[0] || {});
+function Table({ title, header, data, formattedValues, actions }: TableProps) {
   return (
     <div>
       <h2 className="text-lg font-semibold">{title}</h2>
@@ -20,14 +21,9 @@ function Table({ title, data, actions }: TableProps) {
         <table className="table table-auto w-full min-w-max">
           <thead>
             <tr>
-              {columns.map((col, index) => (
-                <th
-                  key={index}
-                  className={
-                    "whitespace-nowrap " + (col === "id" ? "hidden" : "")
-                  }
-                >
-                  {col.charAt(0).toUpperCase() + col.slice(1)}
+              {header.map((col, index) => (
+                <th key={index} className="whitespace-nowrap">
+                  {col}
                 </th>
               ))}
               {actions && actions.length > 0 && <th className="w-16"></th>}
@@ -36,16 +32,11 @@ function Table({ title, data, actions }: TableProps) {
           <tbody>
             {data.map((row, rowIndex) => (
               <tr key={rowIndex} className="hover:bg-base-300">
-                {columns.map((col, colIndex) => (
-                  <td
-                    key={colIndex}
-                    className={
-                      "whitespace-nowrap " + (col === "id" ? "hidden" : "")
-                    }
-                  >
-                    {typeof row[col] === "number"
-                      ? `$${row[col].toFixed(2)}`
-                      : row[col]}
+                {header.map((col, colIndex) => (
+                  <td key={colIndex} className="whitespace-nowrap">
+                    {formattedValues && formattedValues[col]
+                      ? formattedValues[col](row[col.toLowerCase()])
+                      : row[col.toLowerCase()]}
                   </td>
                 ))}
                 {actions && actions.length > 0 && (

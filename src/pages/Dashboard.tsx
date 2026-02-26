@@ -99,11 +99,27 @@ function Dashboard() {
       <div className="max-w-4xl w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="card shadow w-full p-4">
           <h2 className="text-lg font-bold">Recent Income</h2>
-          <Table data={recentIncome} />
+          <Table
+            header={["Date", "Name", "Amount"]}
+            data={recentIncome}
+            formattedValues={{
+              Amount: (value) => {
+                return `$${Number(value).toFixed(2)}`;
+              },
+            }}
+          />
         </div>
         <div className="card shadow w-full p-4">
           <h2 className="text-lg font-bold">Recent Expenses</h2>
-          <Table data={recentExpenses} />
+          <Table
+            header={["Date", "Name", "Amount"]}
+            data={recentExpenses}
+            formattedValues={{
+              Amount: (value) => {
+                return `$${Number(value).toFixed(2)}`;
+              },
+            }}
+          />
         </div>
       </div>
       <div className="max-w-4xl w-full mt-4 card shadow">

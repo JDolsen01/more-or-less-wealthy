@@ -130,7 +130,19 @@ function Recurrings() {
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
           <Table
+            header={["Name", "Due", "Frequency", "Budget", "Amount"]}
             data={recurrings}
+            formattedValues={{
+              Amount: (value) => {
+                return `$${Number(value).toFixed(2)}`;
+              },
+              Budget: (value) => {
+                const budget = budgets.find(
+                  (b) => String(b.id) === String(value),
+                );
+                return budget ? budget.name : "None";
+              },
+            }}
             actions={[
               {
                 action: (row) =>
@@ -170,7 +182,19 @@ function Recurrings() {
         />
         <div className="tab-content border-base-300 bg-base-100 p-4">
           <Table
+            header={["Name", "Due", "Frequency", "Budget", "Amount"]}
             data={pastDueExpenses}
+            formattedValues={{
+              Amount: (value) => {
+                return `$${Number(value).toFixed(2)}`;
+              },
+              Budget: (value) => {
+                const budget = budgets.find(
+                  (b) => String(b.id) === String(value),
+                );
+                return budget ? budget.name : "None";
+              },
+            }}
             actions={[
               {
                 action: (row) =>

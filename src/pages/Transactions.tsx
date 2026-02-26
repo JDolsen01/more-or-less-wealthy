@@ -196,10 +196,15 @@ function Transactions() {
             ]}
           />
           <Table
-            data={[
-              ...incomes,
-              ...expenses.map(({ budget, ...rest }) => rest),
-            ].sort((a, b) => (a.date > b.date ? 1 : -1))}
+            header={["Date", "Name", "Amount"]}
+            data={[...incomes, ...expenses].sort((a, b) =>
+              a.date > b.date ? 1 : -1,
+            )}
+            formattedValues={{
+              Amount: (value) => {
+                return `$${Number(value).toFixed(2)}`;
+              },
+            }}
           />
         </div>
         <input
@@ -219,7 +224,13 @@ function Transactions() {
             ]}
           />
           <Table
+            header={["Date", "Name", "Amount"]}
             data={incomes}
+            formattedValues={{
+              Amount: (value) => {
+                return `$${Number(value).toFixed(2)}`;
+              },
+            }}
             actions={[
               {
                 action: (row) =>
@@ -250,7 +261,19 @@ function Transactions() {
             ]}
           />
           <Table
+            header={["Date", "Name", "Budget", "Amount"]}
             data={expenses}
+            formattedValues={{
+              Amount: (value) => {
+                return `$${Number(value).toFixed(2)}`;
+              },
+              Budget: (value) => {
+                const budget = budgets.find(
+                  (b) => String(b.id) === String(value),
+                );
+                return budget ? budget.name : "None";
+              },
+            }}
             actions={[
               {
                 action: (row) =>
