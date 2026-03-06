@@ -13,7 +13,7 @@ export async function createRecurring(formData: FormData) {
   const due = formData.get("due") as string;
   const frequency = formData.get("frequency") as string;
   const name = formData.get("name");
-  const budget = Number(formData.get("budget"));
+  const budget = formData.get("budget") ? Number(formData.get("budget")) : null;
   const amount = Number(formData.get("amount"));
   const user = await supabase.auth
     .getUser()
@@ -52,7 +52,7 @@ export async function updateRecurring(formData: FormData) {
   const due = formData.get("due") as string;
   const frequency = formData.get("frequency") as string;
   const name = formData.get("name") as string;
-  const budget = Number(formData.get("budget"));
+  const budget = formData.get("budget") ? Number(formData.get("budget")) : null;
   const amount = Number(formData.get("amount"));
   const { data, error } = await supabase
     .from("recurring")
@@ -76,7 +76,7 @@ export async function completeRecurring(formData: FormData) {
   const due = formData.get("due") as string;
   const nextDue = formData.get("nextdue") as string;
   const name = formData.get("name") as string;
-  const budget = Number(formData.get("budget"));
+  const budget = formData.get("budget") ? Number(formData.get("budget")) : null;
   const amount = Number(formData.get("amount"));
 
   const user = await supabase.auth

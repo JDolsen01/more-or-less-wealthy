@@ -82,13 +82,14 @@ function Recurrings() {
   const [budgets, setBudgets] = useState<Array<Budget>>([]);
   useEffect(() => {
     getBudgets().then((data) =>
-      setBudgets(
-        data.map((item) => ({
+      setBudgets([
+        { id: null, name: "-- NONE --", amount: 0 },
+        ...data.map((item) => ({
           id: item.id,
           name: item.name,
           amount: item.amount,
         })),
-      ),
+      ]),
     );
   }, []);
   const [currentRecurring, setCurrentRecurring] = useState<Record<
@@ -347,7 +348,7 @@ function Recurrings() {
       <InputFormModal
         id="completeRecurringModal"
         ref={completeRecurringModal}
-        title="Complete Recurring Expense"
+        title="Complete Recurring Expense?"
         inputs={[
           { label: "Id", type: "hidden", value: currentRecurring?.id },
           { label: "Due", type: "hidden", value: currentRecurring?.due },
