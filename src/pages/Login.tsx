@@ -40,31 +40,33 @@ function Login() {
         </Link>
       </div>
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <h2 className="pb-4">Login Page</h2>
+        <h2 className="text-2xl font-bold pb-4">Welcome Back!</h2>
         <form onSubmit={handleLogin}>
           <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
             <legend className="fieldset-legend">Login</legend>
-
-            <label className="label">Email</label>
-            <input
-              type="email"
-              className="input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              required
-            />
-
-            <label className="label">Password</label>
-            <input
-              type="password"
-              className="input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              required
-            />
-            <button type="submit" className="btn btn-neutral mt-4">
+            <label className="floating-label">
+              <span>Email</span>
+              <input
+                type="email"
+                className="input mb-4"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </label>
+            <label className="floating-label">
+              <span>Password</span>
+              <input
+                type="password"
+                className="input mb-4"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </label>
+            <button type="submit" className="btn btn-neutral">
               Login
             </button>
             <NotificationBanner
