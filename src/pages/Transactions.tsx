@@ -60,13 +60,14 @@ function Transactions() {
   const [budgets, setBudgets] = useState<Array<Budget>>([]);
   useEffect(() => {
     getBudgets().then((data) =>
-      setBudgets(
-        data.map((item) => ({
+      setBudgets([
+        { id: null, name: "-- NONE --", amount: 0 },
+        ...data.map((item) => ({
           id: item.id,
           name: item.name,
           amount: item.amount,
         })),
-      ),
+      ]),
     );
   }, []);
 

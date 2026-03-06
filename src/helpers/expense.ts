@@ -12,7 +12,7 @@ export type Expense = {
 export async function createExpense(formData: FormData) {
   const date = formData.get("date") as string;
   const name = formData.get("name") as string;
-  const budget = Number(formData.get("budget"));
+  const budget = formData.get("budget") ? Number(formData.get("budget")) : null;
   const amount = Number(formData.get("amount"));
   const user = await supabase.auth
     .getUser()
@@ -81,7 +81,7 @@ export async function updateExpense(formData: FormData) {
   const id = formData.get("id") as string;
   const date = formData.get("date") as string;
   const name = formData.get("name") as string;
-  const budget = Number(formData.get("budget"));
+  const budget = formData.get("budget") ? Number(formData.get("budget")) : null;
   const amount = formData.get("amount");
   const { data, error } = await supabase
     .from("expense")
