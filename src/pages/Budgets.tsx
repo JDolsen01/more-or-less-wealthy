@@ -196,7 +196,7 @@ function Budgets() {
                         ${(budget.amount * termFactor).toFixed(2)}
                       </p>
                       <p className="text-xs text-gray-500">
-                        Spent: ${spent[budget.id] || 0}
+                        Spent: ${(spent[budget.id] || 0).toFixed(2)}
                       </p>
                       <p className="text-xs text-gray-500">
                         Remaining: $
@@ -299,7 +299,7 @@ function Budgets() {
                           ${(budget.amount * termFactor).toFixed(2)}
                         </p>
                         <p className="text-xs text-gray-500">
-                          Spent: ${spent[budget.id] || 0}
+                          Spent: ${(spent[budget.id] || 0).toFixed(2)}
                         </p>
                         <p className="text-xs text-gray-500">
                           Remaining: $

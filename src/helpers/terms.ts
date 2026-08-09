@@ -70,6 +70,12 @@ export function getStartAndEndDates(term: Terms, page: number) {
   return [startDate, endDate];
 }
 
+function parseLocalDate(dateString: string) {
+  const [datePart] = dateString.split("T");
+  const [year, month, day] = datePart.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 export function setTermDatapoints(
   term: Terms,
   page: number,
@@ -79,13 +85,16 @@ export function setTermDatapoints(
   const [startDate] = getStartAndEndDates(term, page);
 
   data.forEach(({ date, amount }) => {
-    const d = new Date(date);
+    const d = parseLocalDate(date);
     const index = (() => {
       switch (term) {
         case "month":
           return d.getDate() - 1; // convert to 0-based index
-        case "quarter":
-          return d.getMonth() - startDate.getMonth(); // relative month offset within quarter
+        case "quarter": {
+          const startMonth = startDate.getMonth();
+          const startYear = startDate.getFullYear();
+          return (d.getFullYear() - startYear) * 12 + d.getMonth() - startMonth;
+        }
         case "year":
           return d.getMonth(); // month is already 0-based
         default:
