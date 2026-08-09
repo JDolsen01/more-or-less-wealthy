@@ -76,20 +76,26 @@ export function setTermDatapoints(
   data: { date: string; amount: number }[],
 ) {
   const datapoints = getDataPointsInTerm(term, page);
+  const [startDate] = getStartAndEndDates(term, page);
+
   data.forEach(({ date, amount }) => {
     const d = new Date(date);
     const index = (() => {
       switch (term) {
         case "month":
-          return d.getDate(); // -1 to convert to 0-based index
+          return d.getDate() - 1; // convert to 0-based index
         case "quarter":
+          return d.getMonth() - startDate.getMonth(); // relative month offset within quarter
         case "year":
           return d.getMonth(); // month is already 0-based
         default:
           return 0;
       }
     })();
-    datapoints[index] += amount;
+
+    if (index >= 0 && index < datapoints.length) {
+      datapoints[index] += amount;
+    }
   });
   return datapoints;
 }
