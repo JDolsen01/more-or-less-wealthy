@@ -323,7 +323,7 @@ function Transactions() {
         onSubmit={async (formData) => {
           await createIncome(formData);
           if (setIncomes) {
-            const incomes = await getIncomes();
+            const incomes = await getIncomesByTerm(currentTerm, page);
             const mapped = incomes.map((item) => ({
               id: item.id,
               date: item.date,
@@ -355,7 +355,7 @@ function Transactions() {
         onSubmit={async (formData) => {
           await createExpense(formData);
           if (setExpenses) {
-            const expenses = await getExpenses();
+            const expenses = await getExpensesByTerm(currentTerm, page);
             const mapped = expenses.map((item) => ({
               id: item.id,
               date: item.date,
