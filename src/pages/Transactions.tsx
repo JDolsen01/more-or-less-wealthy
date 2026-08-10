@@ -7,7 +7,6 @@ import Table from "../components/Table";
 import {
   createIncome,
   deleteIncome,
-  getIncomes,
   getIncomesByTerm,
   updateIncome,
   type Income,
@@ -16,7 +15,6 @@ import { type Budget, getBudgets } from "../helpers/budget";
 import {
   createExpense,
   deleteExpense,
-  getExpenses,
   getExpensesByTerm,
   updateExpense,
   type Expense,
